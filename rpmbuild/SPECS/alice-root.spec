@@ -130,6 +130,7 @@ BuildRequires:	desktop-file-utils
 BuildRequires:	dcap-devel
 BuildRequires:	dpm-devel
 BuildRequires:	alice-xrootd
+BuildRequires:	alice-alien
 BuildRequires:	cfitsio-devel
 BuildRequires:	emacs
 BuildRequires:	emacs-el
@@ -659,6 +660,13 @@ Group:		Applications/Engineering
 %description matrix
 This package contains the Matrix library for ROOT.
 
+%package pythia6-single
+Summary:	Fake pythia for ALICE
+Group:		Applications/Engineering
+
+%description pythia6-single
+Fake pythia for ALICE
+
 %package minuit
 Summary:	Minuit library for ROOT
 Group:		Applications/Engineering
@@ -849,6 +857,14 @@ Group:		Applications/Engineering
 %description netx
 This package contains the NetX extension for ROOT, i.e. a client for
 the xrootd server.
+
+%package net-alien
+Summary:	AliEn for ROOT
+Group:		Applications/Engineering
+Requires:	alice-alien
+
+%description net-alien
+AliEn support for ROOT
 
 %package proof
 Summary:	PROOF extension for ROOT
@@ -1128,6 +1144,8 @@ unset QTLIB
 unset QTINC
 #export ROOTSYS="%{_prefix}"
 ./configure \
+	    --with-pythia6-uscore=SINGLE \
+	    --with-f77=gfortran \
 %if %{?fedora}%{!?fedora:0} >= 13 || %{?rhel}%{!?rhel:0} >= 6
 	    --disable-builtin-afterimage \
 %else
@@ -1191,6 +1209,9 @@ unset QTINC
 	    --enable-xrootd \
 	      --with-xrootd-incdir=%{xrootd_dir}/include/xrootd \
 	      --with-xrootd-libdir=%{xrootd_dir}/lib \
+	    --enable-alien \
+	      --with-alien-incdir=%{alien_dir}/include \
+	      --with-alien-libdir=%{alien_dir}/lib \
 %ifarch %{ix86} x86_64
 	    --enable-cintex \
 %else
@@ -1198,7 +1219,6 @@ unset QTINC
 %endif
 	    --disable-afdsmgrd \
 	    --disable-afs \
-	    --disable-alien \
 	    --disable-alloc \
 	    --disable-castor \
 	    --disable-chirp \
@@ -1208,12 +1228,13 @@ unset QTINC
 	    --disable-hdfs \
 	    --disable-monalisa \
 	    --disable-oracle \
-	    --disable-pythia6 \
 	    --disable-pythia8 \
 	    --disable-rpath \
 	    --disable-sapdb \
 	    --disable-srp \
 	    --fail-on-missing
+
+export LD_LIBRARY_PATH="%{openssl_dir}/lib:%{xrootd_dir}/lib:%{alien_dir}/lib:$LD_LIBRARY_PATH"
 
 make OPTFLAGS="%{optflags}" \
 	EXTRA_LDFLAGS="%{?__global_ldflags}" %{?_smp_mflags}
@@ -1330,7 +1351,7 @@ rm ${RPM_BUILD_ROOT}%{_datadir}/system.plugins-ios
 rm ${RPM_BUILD_ROOT}%{_libdir}/libAfterImage.a
 %endif
 rm ${RPM_BUILD_ROOT}%{_bindir}/setxrd*
-rm ${RPM_BUILD_ROOT}%{_bindir}/thisroot*
+#rm ${RPM_BUILD_ROOT}%{_bindir}/thisroot*
 rm ${RPM_BUILD_ROOT}%{_mandir}/man1/cint.1
 rm ${RPM_BUILD_ROOT}%{_mandir}/man1/g2rootold.1
 rm ${RPM_BUILD_ROOT}%{_mandir}/man1/makecint.1
@@ -1362,10 +1383,10 @@ rm TDataProgressDialog/P010_TDataProgressDialog.C
 rm TFile/P030_TCastorFile.C
 rm TFile/P050_TGFALFile.C
 rm TFile/P060_TChirpFile.C
-rm TFile/P070_TAlienFile.C
+##rm TFile/P070_TAlienFile.C
 rm TFile/P110_THDFSFile.C
 rm TGLManager/P020_TGWin32GLManager.C
-rm TGrid/P010_TAlien.C
+##rm TGrid/P010_TAlien.C
 rm TGrid/P020_TGLite.C
 %if %{?fedora}%{!?fedora:0} < 9 && %{?rhel}%{!?rhel:0} < 6
 rm TGuiFactory/P020_TQtRootGuiFactory.C
@@ -1373,7 +1394,7 @@ rm TGuiFactory/P020_TQtRootGuiFactory.C
 rm TImagePlugin/P010_TASPluginGS.C
 rm TSQLServer/P030_TSapDBServer.C
 rm TSQLServer/P040_TOracleServer.C
-rm TSystem/P030_TAlienSystem.C
+##rm TSystem/P030_TAlienSystem.C
 rm TSystem/P060_THDFSSystem.C
 rm TViewerX3D/P020_TQtViewerX3D.C
 rm TVirtualGLImp/P020_TGWin32GL.C
@@ -1385,7 +1406,7 @@ rm TVirtualX/P040_TGQt.C
 %endif
 rmdir TAFS
 rmdir TDataProgressDialog
-rmdir TGrid
+##rmdir TGrid
 rmdir TImagePlugin
 popd
 
@@ -1410,8 +1431,7 @@ mkdir -p ${RPM_BUILD_ROOT}%{_defaultdocdir}/html
 for module in `find * -name Module.mk` ; do
     module=`dirname $module`
     make -f %{SOURCE1} includelist MODULE=$module ROOT_SRCDIR=$PWD \
-	HASXRD=yes CRYPTOLIB=yes SSLLIB=yes
-#BUILDALIEN=yes
+	HASXRD=yes CRYPTOLIB=yes SSLLIB=yes BUILDALIEN=yes
 done
 
 # ... and merge some of them
@@ -1454,30 +1474,30 @@ update-mime-database %{_datadir}/mime >/dev/null 2>&1 || :
 %posttrans
 gtk-update-icon-cache %{_prefix}/icons/hicolor >/dev/null 2>&1 || :
 
-%post rootd -p /sbin/ldconfig
+%post rootd 
 #/sbin/chkconfig --add rootd
 
-%preun rootd -p /sbin/ldconfig
+%preun rootd 
 #if [ $1 = 0 ] ; then
 #    /sbin/service rootd stop >/dev/null 2>&1
 #    /sbin/chkconfig --del rootd
 #fi
 
-%postun rootd -p /sbin/ldconfig
+%postun rootd 
 #if [ "$1" -ge "1" ] ; then
 #    /sbin/service rootd condrestart >/dev/null 2>&1 || :
 #fi
 
-%post proofd -p /sbin/ldconfig
+%post proofd 
 #/sbin/chkconfig --add proofd
 
-%preun proofd -p /sbin/ldconfig
+%preun proofd 
 #if [ $1 = 0 ] ; then
 #    /sbin/service proofd stop >/dev/null 2>&1
 #    /sbin/chkconfig --del proofd
 #fi
 
-%postun proofd -p /sbin/ldconfig
+%postun proofd 
 #if [ "$1" -ge "1" ] ; then
 #    /sbin/service proofd condrestart >/dev/null 2>&1 || :
 #fi
@@ -1619,6 +1639,8 @@ fi
 %postun mathmore -p /sbin/ldconfig
 %post matrix -p /sbin/ldconfig
 %postun matrix -p /sbin/ldconfig
+%post pythia6-single -p /sbin/ldconfig
+%postun pythia6-single -p /sbin/ldconfig
 %post minuit -p /sbin/ldconfig
 %postun minuit -p /sbin/ldconfig
 %post minuit2 -p /sbin/ldconfig
@@ -1659,6 +1681,8 @@ fi
 %postun net-ldap -p /sbin/ldconfig
 %post netx -p /sbin/ldconfig
 %postun netx -p /sbin/ldconfig
+%post net-alien -p /sbin/ldconfig
+%postun net-alien -p /sbin/ldconfig
 %post proof -p /sbin/ldconfig
 %postun proof -p /sbin/ldconfig
 %post proof-sessionviewer -p /sbin/ldconfig
@@ -1695,6 +1719,7 @@ fi
 %{_bindir}/roots
 %{_bindir}/roots.exe
 %{_bindir}/ssh2rpd
+%{_bindir}/thisroot.*
 %{_mandir}/man1/hadd.1*
 %{_mandir}/man1/root.1*
 %{_mandir}/man1/root.exe.1*
@@ -2092,6 +2117,10 @@ fi
 %defattr(-,root,root,-)
 %{_libdir}/libMatrix.*
 
+%files pythia6-single -f includelist-montecarlo-pythia6
+%defattr(-,root,root,-)
+%{_libdir}/libEGPythia6.*
+
 %files minuit -f includelist-math-minuit
 %defattr(-,root,root,-)
 %{_libdir}/libMinuit.*
@@ -2198,6 +2227,13 @@ fi
 %{_datadir}/plugins/TFile/P100_TXNetFile.C
 %{_datadir}/plugins/TFileStager/P010_TXNetFileStager.C
 %{_datadir}/plugins/TSystem/P040_TXNetSystem.C
+
+%files net-alien -f includelist-net-alien
+%defattr(-,root,root,-)
+%{_libdir}/libRAliEn.*
+%{_datadir}/plugins/TFile/P070_TAlienFile.C
+%{_datadir}/plugins/TGrid/P010_TAlien.C
+%{_datadir}/plugins/TSystem/P030_TAlienSystem.C
 
 %files proof -f includelist-proof-proof
 %defattr(-,root,root,-)
