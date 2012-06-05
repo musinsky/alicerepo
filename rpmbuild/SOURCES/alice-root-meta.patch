@@ -1,0 +1,44 @@
+diff -ur root-5.32.00.orig/core/meta/src/TCint.cxx root-5.32.00/core/meta/src/TCint.cxx
+--- root-5.32.00.orig/core/meta/src/TCint.cxx	2011-12-02 12:41:50.000000000 +0100
++++ root-5.32.00/core/meta/src/TCint.cxx	2012-02-18 12:07:12.157520013 +0100
+@@ -320,23 +320,27 @@
+    ProcessLine("#define ROOT_TError 0");
+    ProcessLine("#define ROOT_TGenericClassInfo 0");   
+ 
+-   TString include;
+-   // Add the root include directory to list searched by default
++   Int_t includes = gEnv->GetValue("Cint.Includes", 1);
++   if (includes > 0) {
++      TString include;
++      // Add the root include directory to list searched by default
+ #ifndef ROOTINCDIR
+-   include = gSystem->Getenv("ROOTSYS");
+-   include.Append("/include");
++      include = gSystem->Getenv("ROOTSYS");
++      include.Append("/include");
+ #else
+-   include = ROOTINCDIR;
++      include = ROOTINCDIR;
+ #endif
+-  TCint::AddIncludePath(include);
++      TCint::AddIncludePath(include);
+ 
+-   // Allow the usage of ClassDef and ClassImp in interpreted macros
+-   // if RtypesCint.h can be found (think of static executable without include/)
+-  char* whichTypesCint = gSystem->Which(include, "RtypesCint.h");
+-  if (whichTypesCint) {
+-      ProcessLine("#include <RtypesCint.h>");
+-      delete[] whichTypesCint;
+-  }
++      // Allow the usage of ClassDef and ClassImp in interpreted macros
++      // if RtypesCint.h can be found (think of static executable without
++      // include/)
++      char* whichTypesCint = gSystem->Which(include, "RtypesCint.h");
++      if (whichTypesCint) {
++         ProcessLine("#include <RtypesCint.h>");
++         delete[] whichTypesCint;
++      }
++   }
+ 
+ }
+ 

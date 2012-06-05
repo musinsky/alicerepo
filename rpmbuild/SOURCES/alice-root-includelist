@@ -1,0 +1,11 @@
+include $(MODULE)/Module.mk
+includelist:
+	@list=includelist-`tr / - <<< $(MODULE)` ; \
+	rm -f $$list ; \
+	for h in $(filter-out %.cw %.pri, $(ALLHDRS)) ; do \
+	    sed 's!^include!%{_includedir}!' <<< $$h >> $$list ; \
+	done ; \
+	if [ -r $$list ] ; then \
+	    sort -u $$list > $$list.unique ; \
+	    mv $$list.unique $$list ; \
+	fi

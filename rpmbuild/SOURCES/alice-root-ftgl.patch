@@ -1,0 +1,55 @@
+diff -ur root-trunk.orig/configure root-trunk/configure
+--- root-trunk.orig/configure	2010-12-04 00:23:49.000000000 +0100
++++ root-trunk/configure	2010-12-04 19:40:46.810052008 +0100
+@@ -2502,13 +2502,13 @@
+          message "Checking for libftgl"
+          if pkg-config --exists ftgl ; then
+             result "ok"
+-            message "Checking for ftgl version > 2.1.2"
++            message "Checking for ftgl"
+             ftgl_version=`pkg-config --modversion ftgl | \
+             tr '.' ' ' | \
+             awk 'BEGIN { FS = " "; } \
+                { printf "%d", ($''1 * 1000 + $''2) * 1000 + $''3;}'`
+             # Use FTGL/ftgl.h when > 2.1.2
+-            if test $ftgl_version -gt 2001002 ; then
++            if test $ftgl_version -gt 0 ; then
+                result "ok"
+                ftglincdir=`pkg-config --cflags-only-I ftgl | sed 's/-I//g'`
+                ftgllibs=`pkg-config --libs-only-l ftgl`
+diff -ur root-trunk.orig/graf3d/gl/src/TGLFontManager.cxx root-trunk/graf3d/gl/src/TGLFontManager.cxx
+--- root-trunk.orig/graf3d/gl/src/TGLFontManager.cxx	2010-11-03 22:51:45.000000000 +0100
++++ root-trunk/graf3d/gl/src/TGLFontManager.cxx	2010-12-04 19:36:46.716052000 +0100
+@@ -25,7 +25,13 @@
+ // Direct inclussion of FTGL headers is deprecated in ftgl-2.1.3 while
+ // ftgl-2.1.2 shipped with ROOT requires manual inclusion.
+ #ifndef BUILTIN_FTGL
+-# include <FTGL/ftgl.h>
++# include <FTGL/FTFont.h>
++# include <FTGL/FTGLExtrdFont.h>
++# include <FTGL/FTGLOutlineFont.h>
++# include <FTGL/FTGLPolygonFont.h>
++# include <FTGL/FTGLTextureFont.h>
++# include <FTGL/FTGLPixmapFont.h>
++# include <FTGL/FTGLBitmapFont.h>
+ #else
+ # include "FTFont.h"
+ # include "FTGLExtrdFont.h"
+diff -ur root-trunk.orig/graf3d/gl/src/TGLText.cxx root-trunk/graf3d/gl/src/TGLText.cxx
+--- root-trunk.orig/graf3d/gl/src/TGLText.cxx	2010-11-03 22:51:45.000000000 +0100
++++ root-trunk/graf3d/gl/src/TGLText.cxx	2010-12-04 19:36:46.716052000 +0100
+@@ -23,7 +23,13 @@
+ // Direct inclussion of FTGL headers is deprecated in ftgl-2.1.3 while
+ // ftgl-2.1.2 shipped with ROOT requires manual inclusion.
+ #ifndef BUILTIN_FTGL
+-# include <FTGL/ftgl.h>
++# include <FTGL/FTFont.h>
++# include <FTGL/FTGLExtrdFont.h>
++# include <FTGL/FTGLOutlineFont.h>
++# include <FTGL/FTGLPolygonFont.h>
++# include <FTGL/FTGLTextureFont.h>
++# include <FTGL/FTGLPixmapFont.h>
++# include <FTGL/FTGLBitmapFont.h>
+ #else
+ # include "FTFont.h"
+ # include "FTGLExtrdFont.h"

@@ -11,8 +11,8 @@ URL:		http://www.xrootd.org/
 Source0:	xrootd-%{version}.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:	alice-openssl
-Requires:	alice-openssl
+BuildRequires:	alice-openssl libxml2-devel
+Requires:	alice-openssl libxml2
 
 # define alice dir sctucture
 %define alice_dir /usr/cern/alice

@@ -1,0 +1,22 @@
+diff -ur root-5.32.01.orig/configure root-5.32.01/configure
+--- root-5.32.01.orig/configure	2012-02-29 16:46:41.000000000 +0100
++++ root-5.32.01/configure	2012-03-17 14:14:02.822111495 +0100
+@@ -4486,10 +4486,14 @@
+    if test "x$enable_xrootd" = "xyes"; then
+       xrdlibdir="$tmpxrdlibdir"
+       if test "x$enable_bonjour" = "xyes"; then
+-         check_symbol XrdOucBonjour "$libxrdoucbjr" "$xrdlibdir"
+-         if test  $found_symbol -eq 0 ; then
+-            bonjourcppflags=
+-         fi
++         # This check is broken. The xrootd libraries are C++ hence their
++         # symbol names are mangled. The check_symbol macro is designed
++         # to check for unmangled symbol names in C libraries.
++         # check_symbol XrdOucBonjour "$libxrdoucbjr" "$xrdlibdir"
++         # if test  $found_symbol -eq 0 ; then
++         #    bonjourcppflags=
++         # fi
++         bonjourcppflags=
+       fi
+    fi
+ fi
