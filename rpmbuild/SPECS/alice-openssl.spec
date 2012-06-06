@@ -6,13 +6,12 @@
 
 Name:           %{alice_name}
 Version:        0.9.8x
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A general purpose cryptography library with TLS implementation
 License:        OpenSSL
 URL:            http://www.openssl.org/
 Source:         http://www.openssl.org/source/%{package_name}-%{version}.tar.gz
 Patch:          openssl-0.9.8-no-rpath.patch
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires:  coreutils, perl, sed, zlib-devel
 Requires:       coreutils
 
@@ -29,26 +28,32 @@ ALICE notes: needed only libcrypto.so, libssl.so and include dir
 %patch -p1 -b .no-rpath
 
 %build
-./config --prefix=%{alice_prefix} \
-    shared zlib no-asm no-krb5
-make
+./config --prefix=%{alice_prefix} shared
+make # don't use _smp_mflags (parallel make)
 
 %install
-rm -rf %{buildroot}
 make INSTALL_PREFIX=%{buildroot} install_sw
 
 # remove unnecessary files
-rm -rf %{buildroot}/%{alice_prefix}/bin/
-rm -rf %{buildroot}/%{alice_prefix}/ssl/
+rm -rf %{buildroot}/%{alice_prefix}/{bin,ssl}
 
-%clean
-rm -rf %{buildroot}
+# create ld.so.conf.d
+mkdir -p %{buildroot}/etc/ld.so.conf.d
+echo "%{alice_prefix}/lib" > %{buildroot}/etc/ld.so.conf.d/%{alice_name}-%{_arch}.conf
 
 %files
 %defattr(-,root,root,-)
 %{alice_prefix}/*
+/etc/ld.so.conf.d/*
+
+%post -p /sbin/ldconfig
+
+%postun -p /sbin/ldconfig
 
 %changelog
+* Wed Jun 07 2012 Jan Musinsky <musinsky@gmail.com> 0.9.8x-3
+- resolve problem with Rpath and improvements
+
 * Wed Jun 06 2012 Jan Musinsky <musinsky@gmail.com> 0.9.8x-2
 - small changes
 
