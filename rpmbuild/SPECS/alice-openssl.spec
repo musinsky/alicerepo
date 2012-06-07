@@ -1,7 +1,7 @@
 # ALICE specific
 %define package_name openssl
 %define alice_name alice-%{package_name}
-%define alice_prefix /opt/cern/alice/%{alice_name}-%{version}
+%define alice_prefix /opt/cern/alice/%{package_name}/%{version}
 %define debug_package %{nil}
 
 Name:           %{alice_name}
@@ -46,8 +46,9 @@ rm -rf %{buildroot}/%{alice_prefix}/{bin,ssl}
 %postun -p /sbin/ldconfig
 
 %changelog
-* Thu Jun 07 2012 Jan Musinsky <musinsky@gmail.com> 0.9.8x-4
+* Thu Jun 07 2012 Martin Vala <Martin.Vala@cern.ch> 0.9.8x-4
 - removed ld.so.conf.d
+- package directory structure changed
 
 * Thu Jun 07 2012 Jan Musinsky <musinsky@gmail.com> 0.9.8x-3
 - resolve problem with Rpath and improvements
