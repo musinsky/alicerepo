@@ -15,7 +15,7 @@ BuildRequires:	alice-xrootd autoconf libtool chrpath
 Requires:	alice-xrootd
 
 # define alice dir sctucture
-%define alice_dir /usr/cern/alice
+%define alice_dir /opt/cern/alice
 %define xrootd_dir %{alice_dir}/alice-xrootd/3.0.5
 %define _prefix %{alice_dir}/%{name}/%{version}
 

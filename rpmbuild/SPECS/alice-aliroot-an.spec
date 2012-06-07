@@ -15,7 +15,7 @@ BuildRequires:	alice-geant3 cmake
 Requires:	alice-geant3
 
 # define alice dir sctucture
-%define alice_dir /usr/cern/alice
+%define alice_dir /opt/cern/alice
 %define rootsys_dir %{alice_dir}/alice-root/5.33.02b
 %define geant3_dir %{alice_dir}/alice-geant3/1.14.2
 %define openssl_dir %{alice_dir}/alice-openssl/0.9.8x

@@ -15,7 +15,7 @@ BuildRequires:	alice-openssl libxml2-devel
 Requires:	alice-openssl libxml2
 
 # define alice dir sctucture
-%define alice_dir /usr/cern/alice
+%define alice_dir /opt/cern/alice
 %define openssl_dir %{alice_dir}/alice-openssl/0.9.8x
 %define _prefix %{alice_dir}/%{name}/%{version}
 

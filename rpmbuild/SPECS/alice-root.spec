@@ -1,7 +1,7 @@
 # no debug info is generated
 %global debug_package %{nil}
 
-%define alice_dir /usr/cern/alice
+%define alice_dir /opt/cern/alice
 %define _prefix %{alice_dir}/%{name}/%{version}
 %define openssl_dir %{alice_dir}/alice-openssl/0.9.8x
 %define xrootd_dir %{alice_dir}/alice-xrootd/3.0.5

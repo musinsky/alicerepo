@@ -15,7 +15,7 @@ BuildRequires:	alice-root
 Requires:	alice-root
 
 # define alice dir sctucture
-%define alice_dir /usr/cern/alice
+%define alice_dir /opt/cern/alice
 %define rootsys_dir %{alice_dir}/alice-root/5.33.02b
 %define _prefix %{alice_dir}/%{name}/%{version}
 
