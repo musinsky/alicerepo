@@ -37,14 +37,9 @@ make INSTALL_PREFIX=%{buildroot} install_sw
 # remove unnecessary files
 rm -rf %{buildroot}/%{alice_prefix}/{bin,ssl}
 
-# create ld.so.conf.d
-mkdir -p %{buildroot}/etc/ld.so.conf.d
-echo "%{alice_prefix}/lib" > %{buildroot}/etc/ld.so.conf.d/%{alice_name}-%{_arch}.conf
-
 %files
 %defattr(-,root,root,-)
 %{alice_prefix}/*
-/etc/ld.so.conf.d/*
 
 %post -p /sbin/ldconfig
 
