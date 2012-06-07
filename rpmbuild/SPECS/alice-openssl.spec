@@ -6,7 +6,7 @@
 
 Name:           %{alice_name}
 Version:        0.9.8x
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        A general purpose cryptography library with TLS implementation
 License:        OpenSSL
 URL:            http://www.openssl.org/
@@ -46,7 +46,10 @@ rm -rf %{buildroot}/%{alice_prefix}/{bin,ssl}
 %postun -p /sbin/ldconfig
 
 %changelog
-* Wed Jun 07 2012 Jan Musinsky <musinsky@gmail.com> 0.9.8x-3
+* Thu Jun 07 2012 Jan Musinsky <musinsky@gmail.com> 0.9.8x-4
+- removed ld.so.conf.d
+
+* Thu Jun 07 2012 Jan Musinsky <musinsky@gmail.com> 0.9.8x-3
 - resolve problem with Rpath and improvements
 
 * Wed Jun 06 2012 Jan Musinsky <musinsky@gmail.com> 0.9.8x-2
