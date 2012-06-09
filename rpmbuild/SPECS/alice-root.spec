@@ -1,11 +1,20 @@
 # no debug info is generated
 %global debug_package %{nil}
 
+%define package_name root
+
+%define alice_name alice-%{package_name}
+
 %define alice_dir /opt/cern/alice
-%define _prefix %{alice_dir}/%{name}/%{version}
-%define openssl_dir %{alice_dir}/alice-openssl/0.9.8x
-%define xrootd_dir %{alice_dir}/alice-xrootd/3.0.5
-%define alien_dir %{alice_dir}/alice-alien/1.0.14n
+%define alice_prefix %{alice_dir}/%{package_name}/%{version}
+%define alice_env_module_dir %{alice_dir}/env_modules
+
+
+# version and deps
+%define alice_package_version 5.33.02b
+%define openssl_dir %{alice_dir}/openssl/0.9.8x
+%define xrootd_dir %{alice_dir}/xrootd/3.0.5
+%define alien_dir %{alice_dir}/alien/1.0.14n
 
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
@@ -28,14 +37,14 @@
 
 #%if %($(pkg-config emacs) ; echo $?)
 %global emacs_version 21.4
-%global emacs_lispdir %{_prefix}/build/misc
+%global emacs_lispdir %{alice_prefix}/build/misc
 #%else
 #%global emacs_version %(pkg-config emacs --modversion)
 #%global emacs_lispdir %(pkg-config emacs --variable sitepkglispdir)
 #%endif
 
-Name:		alice-root
-Version:	5.33.02b
+Name:		%{alice_name}
+Version:	%{alice_package_version}
 %global libversion %(cut -d. -f 1-2 <<< %{version})
 Release:	1%{?dist}
 Summary:	Numerical data analysis framework
@@ -1142,7 +1151,7 @@ sed 's/python /python26 /' -i bindings/pyroot26/Module.mk
 unset QTDIR
 unset QTLIB
 unset QTINC
-#export ROOTSYS="%{_prefix}"
+export ROOTSYS="%{alice_prefix}"
 ./configure \
 	    --with-pythia6-uscore=SINGLE \
 	    --with-f77=gfortran \
@@ -1198,8 +1207,8 @@ unset QTINC
 	    --enable-shadowpw \
 	    --enable-shared \
 	    --enable-ssl \
-	    --with-ssl-incdir=%{openssl_dir}/include \
-	    --with-ssl-libdir=%{openssl_dir}/lib \
+	      --with-ssl-incdir=%{openssl_dir}/include \
+	      --with-ssl-libdir=%{openssl_dir}/lib \
 	    --enable-table \
 	    --enable-tmva \
 	    --enable-unuran \
@@ -1252,16 +1261,36 @@ make OPTFLAGS="%{optflags}" \
 
 %install
 rm -rf %{buildroot}
-export ROOTSYS="%{_prefix}"
+export ROOTSYS="%{alice_prefix}"
 make install DESTDIR=%{buildroot}
 
 # some redefinition of variables
-%global emacs_lispdir %{_prefix}/build/misc
-%define _datadir %{_prefix}/etc
-%define _mandir %{_prefix}/man
-%define _defaultdocdir %{_prefix}
-#%define _bindir %{_prefix}/bin
-#%define _libdir %{_prefix}/lib
+%global emacs_lispdir %{alice_prefix}/build/misc
+%define _datadir %{alice_prefix}/etc
+%define _mandir %{alice_prefix}/man
+%define _defaultdocdir %{alice_prefix}
+%define _includedir %{alice_prefix}/include
+#%define _bindir %{alice_prefix}/bin
+#%define _libdir %{alice_prefix}/lib
+
+# creating module file
+mkdir -p %{buildroot}%{_datadir}/modulefiles
+cat > %{buildroot}%{_datadir}/modulefiles/%{alice_name}-%{alice_package_version}-%{_arch} <<EOF
+#%Module 1.0
+#
+# AliRoot module for use with 'environment-modules' package:
+#
+prepend-path            PATH            %{xrootd_dir}/bin
+prepend-path            PATH            %{alien_dir}/bin
+prepend-path            PATH            %{rootsys_dir}/binalice_arch
+prepend-path            LD_LIBRARY_PATH %{openssl_dir}/lib
+prepend-path            LD_LIBRARY_PATH %{xrootd_dir}/lib
+prepend-path            LD_LIBRARY_PATH %{alien_dir}/lib
+prepend-path            LD_LIBRARY_PATH %{rootsys_dir}/lib
+setenv                  X509_CERT_DIR   %{alien_dir}/share/certificates
+setenv                  GSHELL_NO_GCC   1
+setenv                  GSHELL_ROOT     %{alien_dir}
+EOF
 
 # Do emacs byte compilation
 emacs -batch -no-site-file -f batch-byte-compile \
@@ -1269,7 +1298,7 @@ emacs -batch -no-site-file -f batch-byte-compile \
 
 # Install desktop entry and icon
 mkdir -p ${RPM_BUILD_ROOT}%{_datadir}/applications
-mkdir -p ${RPM_BUILD_ROOT}%{_prefix}/icons/hicolor/48x48/apps
+mkdir -p ${RPM_BUILD_ROOT}%{alice_prefix}/icons/hicolor/48x48/apps
 
 cat > root.desktop << EOF
 [Desktop Entry]
@@ -1288,18 +1317,18 @@ EOF
 desktop-file-install --dir=${RPM_BUILD_ROOT}%{_datadir}/applications \
 		     --vendor "" root.desktop
 install -p -m 644 build/package/debian/root-system-bin.png \
-    ${RPM_BUILD_ROOT}%{_prefix}/icons/hicolor/48x48/apps/root.png
+    ${RPM_BUILD_ROOT}%{alice_prefix}/icons/hicolor/48x48/apps/root.png
 
 # Install mime type and icon
 mkdir -p ${RPM_BUILD_ROOT}%{_datadir}/mime/packages
-mkdir -p ${RPM_BUILD_ROOT}%{_prefix}/icons/hicolor/48x48/mimetypes
+mkdir -p ${RPM_BUILD_ROOT}%{alice_prefix}/icons/hicolor/48x48/mimetypes
 install -p -m 644 build/package/debian/root-system-bin.sharedmimeinfo \
     ${RPM_BUILD_ROOT}%{_datadir}/mime/packages/root.xml
 install -p -m 644 build/package/debian/application-x-root.png \
-    ${RPM_BUILD_ROOT}%{_prefix}/icons/hicolor/48x48/mimetypes
+    ${RPM_BUILD_ROOT}%{alice_prefix}/icons/hicolor/48x48/mimetypes
 
 
-rm -Rf ${RPM_BUILD_ROOT}%{_prefix}/fonts
+rm -Rf ${RPM_BUILD_ROOT}%{alice_prefix}/fonts
 # Init scripts for services
 ##mkdir -p ${RPM_BUILD_ROOT}%{_initrddir}
 rm ${RPM_BUILD_ROOT}%{_datadir}/daemons/proofd.rc.d
@@ -1371,10 +1400,10 @@ rm ${RPM_BUILD_ROOT}%{_defaultdocdir}/README.ALIEN
 rm ${RPM_BUILD_ROOT}%{_defaultdocdir}/README.MONALISA
 
 # Remove cintdll sources - keep the prec_stl directory
-rm -rf ${RPM_BUILD_ROOT}%{_prefix}/cint/cint/lib/{[^p],p[^r]}*
+rm -rf ${RPM_BUILD_ROOT}%{alice_prefix}/cint/cint/lib/{[^p],p[^r]}*
 
 # Only used on Windows
-rm ${RPM_BUILD_ROOT}%{_prefix}/macros/fileopen.C
+rm ${RPM_BUILD_ROOT}%{alice_prefix}/macros/fileopen.C
 
 # Remove plugin definitions for non-built and obsolete plugins
 pushd ${RPM_BUILD_ROOT}%{_datadir}/plugins
@@ -1459,20 +1488,20 @@ cat includelist-proof-proofplayer >> includelist-proof-proof
 rm -rf $RPM_BUILD_ROOT
 
 %post
-touch --no-create %{_prefix}/icons/hicolor >/dev/null 2>&1 || :
+touch --no-create %{alice_prefix}/icons/hicolor >/dev/null 2>&1 || :
 update-desktop-database >/dev/null 2>&1 || :
 update-mime-database %{_datadir}/mime >/dev/null 2>&1 || :
 
 %postun
 if [ $1 -eq 0 ] ; then
-    touch --no-create %{_prefix}/icons/hicolor >/dev/null 2>&1
-    gtk-update-icon-cache %{_prefix}/icons/hicolor >/dev/null 2>&1 || :
+    touch --no-create %{alice_prefix}/icons/hicolor >/dev/null 2>&1
+    gtk-update-icon-cache %{alice_prefix}/icons/hicolor >/dev/null 2>&1 || :
 fi
 update-desktop-database >/dev/null 2>&1 || :
 update-mime-database %{_datadir}/mime >/dev/null 2>&1 || :
 
 %posttrans
-gtk-update-icon-cache %{_prefix}/icons/hicolor >/dev/null 2>&1 || :
+gtk-update-icon-cache %{alice_prefix}/icons/hicolor >/dev/null 2>&1 || :
 
 %post rootd 
 #/sbin/chkconfig --add rootd
@@ -1727,13 +1756,14 @@ fi
 %{_mandir}/man1/roots.exe.1*
 %{_mandir}/man1/ssh2rpd.1*
 %{_datadir}/applications/root.desktop
-%{_prefix}/icons/hicolor/48x48/apps/root.png
-%{_prefix}/icons/hicolor/48x48/mimetypes/application-x-root.png
+%{alice_prefix}/icons/hicolor/48x48/apps/root.png
+%{alice_prefix}/icons/hicolor/48x48/mimetypes/application-x-root.png
 %{_datadir}/mime/packages/root.xml
+%{_datadir}/modulefiles
 
 %files icons
 %defattr(-,root,root,-)
-%{_prefix}/icons
+%{alice_prefix}/icons
 
 %files core -f includelist-core
 %defattr(-,root,root,-)
@@ -1759,8 +1789,8 @@ fi
 %{_datadir}/system.rootdaemonrc
 %{_datadir}/system.rootrc
 %{_mandir}/man1/system.rootdaemonrc.1*
-%dir %{_prefix}/macros
-%{_prefix}/macros/Dialogs.C
+%dir %{alice_prefix}/macros
+%{alice_prefix}/macros/Dialogs.C
 %dir %{_datadir}/plugins
 %dir %{_datadir}/plugins/*
 %{_includedir}/RConfigOptions.h
@@ -1768,7 +1798,7 @@ fi
 %{_includedir}/compiledata.h
 %{_includedir}/rmain.cxx
 %dir %{_includedir}/Math
-%{_prefix}/build/misc/root.m4
+%{alice_prefix}/build/misc/root.m4
 %doc %{_defaultdocdir}/CREDITS
 %doc %{_defaultdocdir}/LICENSE
 %doc %{_defaultdocdir}/README
@@ -1779,7 +1809,7 @@ fi
 %{_mandir}/man1/rootcint.1*
 %dir %{_libdir}
 %{_libdir}/libCint.*
-%{_prefix}/cint
+%{alice_prefix}/cint
 %dir %{_includedir}
 %config(noreplace) %{_datadir}/ld.so.conf.d/%{name}-%{_arch}.conf
 %doc %dir %{_defaultdocdir}
@@ -2038,7 +2068,7 @@ fi
 %defattr(-,root,root,-)
 %{_libdir}/libHtml.*
 %{_datadir}/html
-%{_prefix}/macros/html.C
+%{alice_prefix}/macros/html.C
 
 %files io -f includelist-io-io
 %defattr(-,root,root,-)

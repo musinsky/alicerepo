@@ -1,11 +1,16 @@
 # ALICE specific
 %define package_name openssl
 %define alice_name alice-%{package_name}
-%define alice_prefix /opt/cern/alice/%{package_name}/%{version}
+%define alice_package_version 0.9.8x
+
+%define alice_dir /opt/cern/alice
+%define alice_prefix %{alice_dir}/%{package_name}/%{version}
+%define alice_env_module_dir %{alice_dir}/env_modules
+
 %define debug_package %{nil}
 
 Name:           %{alice_name}
-Version:        0.9.8x
+Version:        %{alice_package_version}
 Release:        4%{?dist}
 Summary:        A general purpose cryptography library with TLS implementation
 License:        OpenSSL
@@ -36,10 +41,23 @@ make INSTALL_PREFIX=%{buildroot} install_sw
 
 # remove unnecessary files
 rm -rf %{buildroot}/%{alice_prefix}/{bin,ssl}
+rm -rf %{buildroot}/%{alice_prefix}/lib/*.a
+
+mkdir -p %{buildroot}/%{alice_prefix}/etc/modulefiles
+cat > %{buildroot}/%{alice_prefix}/etc/modulefiles/%{alice_name}-%{alice_package_version}-%{_arch} <<EOF
+#%Module 1.0
+# 
+# alice-openssl module for use with 'environment-modules' package:
+# 
+prepend-path            LD_LIBRARY_PATH %{openssl_dir}/lib
+EOF
+
+%clean
+rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
-%{alice_prefix}/*
+%{alice_prefix}
 
 %post -p /sbin/ldconfig
 

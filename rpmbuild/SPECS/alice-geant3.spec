@@ -1,8 +1,24 @@
 # no debug info is generated
 %global debug_package %{nil}
 
-Name:		alice-geant3
-Version:	1.14.2
+%define package_name geant3
+%define alice_name alice-%{package_name}
+
+%define alice_dir /opt/cern/alice
+%define alice_prefix %{alice_dir}/%{name}/%{version}
+%define alice_env_module_dir %{alice_dir}/env_modules
+
+# version and deps
+%define alice_package_version 1.14.2
+%define openssl_dir %{alice_dir}/openssl/0.9.8x
+%define xrootd_dir %{alice_dir}/xrootd/3.0.5
+%define alien_dir %{alice_dir}/alien/1.0.14n
+%define rootsys_dir %{alice_dir}/root/5.33.02b
+
+
+
+Name:		%{alice_name}
+Version:	%{alice_package_version}
 Release:	1%{?dist}
 Summary:	Geant3 for ALICE
 Group:		System Environment/Daemons
@@ -13,11 +29,6 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:	alice-root
 Requires:	alice-root
-
-# define alice dir sctucture
-%define alice_dir /opt/cern/alice
-%define rootsys_dir %{alice_dir}/alice-root/5.33.02b
-%define _prefix %{alice_dir}/%{name}/%{version}
 
 %description
 AliEn for ALICE
@@ -33,21 +44,42 @@ make %{?_smp_mflags}
 
 %install
 rm -rf %{buildroot}
-mkdir -p %{buildroot}%{_prefix}
+mkdir -p %{buildroot}%{alice_prefix}
+PATH="%{rootsys_dir}/bin:$PATH"
 G3TARGET=`root-config --arch`
-mkdir -p %{buildroot}%{_prefix}/lib/tgt_$G3TARGET %{buildroot}%{_prefix}/TGeant3
+mkdir -p %{buildroot}%{alice_prefix}/lib/tgt_$G3TARGET %{buildroot}%{alice_prefix}/TGeant3
 
-cp lib/tgt_$G3TARGET/*.so %{buildroot}%{_prefix}/lib/tgt_$G3TARGET/
-cp TGeant3/*.h %{buildroot}%{_prefix}/TGeant3/
-cp -rf geant321 %{buildroot}%{_prefix}/
+cp lib/tgt_$G3TARGET/*.so %{buildroot}%{alice_prefix}/lib/tgt_$G3TARGET/
+cp TGeant3/*.h %{buildroot}%{alice_prefix}/TGeant3/
+cp -rf geant321 %{buildroot}%{alice_prefix}/
+
+mkdir -p %{buildroot}%{alice_prefix}/etc/modulefiles
+cat > %{buildroot}%{alice_prefix}/etc/modulefiles/%{alice_name}-%{alice_package_version}-%{_arch} <<EOF
+#%Module 1.0
+#
+# AliRoot module for use with 'environment-modules' package:
+#
+prepend-path            PATH            %{xrootd_dir}/bin
+prepend-path            PATH            %{alien_dir}/bin
+prepend-path            PATH            %{rootsys_dir}/binalice_arch
+prepend-path            LD_LIBRARY_PATH %{openssl_dir}/lib
+prepend-path            LD_LIBRARY_PATH %{xrootd_dir}/lib
+prepend-path            LD_LIBRARY_PATH %{alien_dir}/lib
+prepend-path            LD_LIBRARY_PATH %{rootsys_dir}/lib
+prepend-path            LD_LIBRARY_PATH %{geant3_dir}/lib/tgt_$ALICE_TARGET
+setenv                  X509_CERT_DIR   %{alien_dir}/share/certificates
+setenv                  GSHELL_NO_GCC   1
+setenv                  GSHELL_ROOT     %{alien_dir}
+EOF
 
 %clean
 rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
-%{_prefix}/lib
-%{_prefix}/TGeant3
-%{_prefix}/geant321
+%{alice_prefix}/lib
+%{alice_prefix}/TGeant3
+%{alice_prefix}/geant321
+%{alice_prefix}/etc
 
 %changelog
