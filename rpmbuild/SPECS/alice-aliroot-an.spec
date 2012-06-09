@@ -5,7 +5,7 @@
 %define alice_name alice-%{package_name}
 
 %define alice_dir /opt/cern/alice
-%define alice_prefix %{alice_dir}/%{alice_name}/%{version}
+%define alice_prefix %{alice_dir}/%{package_name}/%{version}
 %define alice_env_module_dir %{alice_dir}/env_modules
 
 # version and deps
@@ -26,8 +26,8 @@ URL:		http://aliceinfo.cern.ch/
 Source0:	%{name}-%{version}.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:	alice-geant3 cmake environment-modules
-Requires:	alice-geant3 environment-modules
+BuildRequires:	alice-geant3 alice-root alice-root-net-alien alice-xrootd alice-openssl environment-modules cmake
+Requires:	alice-geant3 alice-root alice-root-net-alien alice-xrootd alice-openssl environment-modules
 
 # define alice dir sctucture
 

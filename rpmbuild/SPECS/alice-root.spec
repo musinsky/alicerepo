@@ -9,7 +9,6 @@
 %define alice_prefix %{alice_dir}/%{package_name}/%{version}
 %define alice_env_module_dir %{alice_dir}/env_modules
 
-
 # version and deps
 %define alice_package_version 5.33.02b
 %define openssl_dir %{alice_dir}/openssl/0.9.8x
@@ -285,7 +284,8 @@ Requires(post):		chkconfig
 Requires(postun):	initscripts
 
 %description proofd
-This package contains the PROOF server. Proofd is the core daemon of
+This package contains the PROOF server. Proofd is the 
+core daemon of
 the PROOF (Parallel ROOT Facility) system for distributed parallel
 computing. Installing this package on a machine makes it possible
 for the machine to participate in a parallel computing farm (cluster
