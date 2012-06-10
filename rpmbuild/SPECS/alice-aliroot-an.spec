@@ -26,8 +26,8 @@ URL:		http://aliceinfo.cern.ch/
 Source0:	%{name}-%{version}.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:	alice-geant3 alice-root alice-root-net-alien alice-xrootd alice-openssl environment-modules cmake
-Requires:	alice-geant3 alice-root alice-root-net-alien alice-xrootd alice-openssl environment-modules
+BuildRequires:	alice-geant3 alice-root alice-root-net-alien alice-root-xproof alice-xrootd alice-openssl environment-modules cmake
+Requires:	alice-geant3 alice-root alice-root-net-alien alice-root-xproof alice-xrootd alice-openssl environment-modules
 
 # define alice dir sctucture
 
