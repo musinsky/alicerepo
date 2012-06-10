@@ -44,9 +44,11 @@ Requires:	alice-environment-modules
 #Requires:  alice-openssl%{?_isa} = %{openssl_ver}
 #Requires:  alice-xrootd%{?_isa} = %{xrootd_ver}
 #Requires:  alice-alien%{?_isa} = %{alien_ver}
-#Requires:  alice-root%{?_isa} = %{root_ver}
+Requires:	alice-root%{?_isa} = %{root_ver}
 Requires:	alice-root-net-alien%{?_isa} = %{root_ver}
 Requires:	alice-root-xproof%{?_isa} = %{root_ver}
+#Requires:	alice-root-montecarlo-vmc%{?_isa} = %{root_ver}
+Requires:	alice-root-pythia6-singlec%{?_isa} = %{root_ver}
 #Requires:  alice-geant3%{?_isa} = %{geant3_ver}
 
 # define alice dir sctucture

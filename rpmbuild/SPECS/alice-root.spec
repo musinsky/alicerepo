@@ -49,7 +49,7 @@
 Name:		%{alice_name}
 Version:	%{alice_package_version}
 %global libversion %(cut -d. -f 1-2 <<< %{version})
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	Numerical data analysis framework
 
 Group:		Applications/Engineering
@@ -98,7 +98,7 @@ BuildRequires:	gl2ps-devel
 BuildRequires:	pcre-devel
 BuildRequires:	zlib-devel
 BuildRequires:	xz-devel
-%if %{?fedora}%{!?fedora:0} >= 13 || %{?rhel}%{!?rhel:0} >= 6
+%if %{?fedora}%{!?fedora:0} < 13 || %{?rhel}%{!?rhel:0} >= 6
 BuildRequires:	libAfterImage-devel >= 1.20
 %else
 BuildRequires:	libjpeg-devel
@@ -1096,7 +1096,7 @@ sed s/fit1_py.py/fit1_py.txt/ -i tutorials/pyroot/fit1.py
 
 # Remove embedded sources in order to be sure they are not used
 #  * afterimage
-%if %{?fedora}%{!?fedora:0} >= 13 || %{?rhel}%{!?rhel:0} >= 6
+%if %{?fedora}%{!?fedora:0} < 17 || %{?rhel}%{!?rhel:0} >= 6
 rm -rf graf2d/asimage/src/libAfterImage
 %else
 rm -rf graf2d/asimage/src/libAfterImage/libjpeg
@@ -1159,7 +1159,7 @@ export ROOTSYS="%{alice_prefix}"
 ./configure \
 	    --with-pythia6-uscore=SINGLE \
 	    --with-f77=gfortran \
-%if %{?fedora}%{!?fedora:0} >= 13 || %{?rhel}%{!?rhel:0} >= 6
+%if %{?fedora}%{!?fedora:0} < 17 || %{?rhel}%{!?rhel:0} >= 6
 	    --disable-builtin-afterimage \
 %else
 	    --enable-builtin-afterimage \
@@ -1380,7 +1380,7 @@ rm -rf ${RPM_BUILD_ROOT}%{_datadir}/proof/utils
 rm ${RPM_BUILD_ROOT}%{_datadir}/root.desktop
 rm ${RPM_BUILD_ROOT}%{_datadir}/system.plugins-ios
 #rm ${RPM_BUILD_ROOT}%{_datadir}/svninfo.txt
-%if %{?fedora}%{!?fedora:0} < 13 && %{?rhel}%{!?rhel:0} < 6
+%if %{?fedora}%{!?fedora:0} < 17 && %{?rhel}%{!?rhel:0} < 6
 rm ${RPM_BUILD_ROOT}%{_libdir}/libAfterImage.a
 %endif
 rm ${RPM_BUILD_ROOT}%{_bindir}/setxrd*
@@ -1926,6 +1926,10 @@ fi
 %defattr(-,root,root,-)
 %{_libdir}/libASImage.*
 %{_libdir}/libASImageGui.*
+%if %{?fedora}%{!?fedora:0} >= 17 || %{?rhel}%{!?rhel:0} >= 6
+%{_libdir}/libAfterImage.a
+%endif
+
 %{_datadir}/plugins/TImage/P010_TASImage.C
 %{_datadir}/plugins/TPaletteEditor/P010_TASPaletteEditor.C
 
