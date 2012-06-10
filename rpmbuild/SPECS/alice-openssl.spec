@@ -1,7 +1,8 @@
+%define alice_package_version 0.9.8x
+
 # ALICE specific
 %define package_name openssl
 %define alice_name alice-%{package_name}
-%define alice_package_version 0.9.8x
 
 %define alice_dir /opt/cern/alice
 %define alice_prefix %{alice_dir}/%{package_name}/%{version}
@@ -18,7 +19,7 @@ URL:            http://www.openssl.org/
 Source:         http://www.openssl.org/source/%{package_name}-%{version}.tar.gz
 Patch:          openssl-0.9.8-no-rpath.patch
 BuildRequires:  coreutils, perl, sed, zlib-devel
-Requires:       coreutils
+Requires:       alice-environment-modules coreutils
 
 %description
 The OpenSSL toolkit provides support for secure communications between

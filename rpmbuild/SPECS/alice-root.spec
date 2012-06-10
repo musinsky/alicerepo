@@ -1,6 +1,10 @@
 # no debug info is generated
 %global debug_package %{nil}
 
+%define openssl_ver 0.9.8x
+%define xrootd_ver 3.0.5
+%define alien_ver 1.0.14n
+
 %define package_name root
 
 %define alice_name alice-%{package_name}
@@ -11,9 +15,9 @@
 
 # version and deps
 %define alice_package_version 5.33.02b
-%define openssl_dir %{alice_dir}/openssl/0.9.8x
-%define xrootd_dir %{alice_dir}/xrootd/3.0.5
-%define alien_dir %{alice_dir}/alien/1.0.14n
+%define openssl_dir %{alice_dir}/openssl/%{openssl_ver}
+%define xrootd_dir %{alice_dir}/xrootd/%{xrootd_ver}
+%define alien_dir %{alice_dir}/alien/%{alien_ver}
 
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
@@ -129,7 +133,7 @@ BuildRequires:	qt4-webkit-devel
 %endif
 BuildRequires:	ruby
 BuildRequires:	ruby-devel
-BuildRequires:	alice-openssl
+BuildRequires:	alice-openssl%{?_isa} = %{openssl_ver}
 BuildRequires:	globus-gss-assist-devel
 BuildRequires:	globus-gsi-credential-devel
 BuildRequires:	globus-proxy-utils
@@ -137,8 +141,8 @@ BuildRequires:	libtool-ltdl-devel
 BuildRequires:	desktop-file-utils
 BuildRequires:	dcap-devel
 BuildRequires:	dpm-devel
-BuildRequires:	alice-xrootd
-BuildRequires:	alice-alien
+BuildRequires:	alice-xrootd%{?_isa} = %{xrootd_ver}
+BuildRequires:	alice-alien%{?_isa} = %{alien_ver}
 BuildRequires:	cfitsio-devel
 BuildRequires:	emacs
 BuildRequires:	emacs-el
@@ -157,7 +161,7 @@ BuildRequires:	liberation-fonts
 %endif
 #		This contains a Symbol font that can be used by fontconfig
 BuildRequires:	urw-fonts
-Requires:	hicolor-icon-theme
+Requires:	hicolor-icon-theme alice-environment-modules
 
 %description
 The ROOT system provides a set of object oriented frameworks with all

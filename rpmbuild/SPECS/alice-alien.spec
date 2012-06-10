@@ -1,6 +1,11 @@
 # no debug info is generated
 %global debug_package %{nil}
 
+# version
+%define alice_package_version 1.0.14n
+# deps versions
+%define xrootd_ver 3.0.5
+
 %define package_name alien
 %define alice_name alice-%{package_name}
 
@@ -8,9 +13,8 @@
 %define alice_prefix %{alice_dir}/%{package_name}/%{version}
 %define alice_env_module_dir %{alice_dir}/env_modules
 
-# version and deps
-%define alice_package_version 1.0.14n
-%define xrootd_dir %{alice_dir}/xrootd/3.0.5
+# deps
+%define xrootd_dir %{alice_dir}/xrootd/%{xrootd_ver}
 
 
 Name:		%{alice_name}
@@ -23,8 +27,9 @@ URL:		http://alien.cern.ch/
 Source0:	"http://alitorrent.cern.ch/src/xalienfs/xrootd-xalienfs-%{version}.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:	alice-xrootd autoconf libtool chrpath
-Requires:	alice-xrootd
+BuildRequires:	alice-xrootd%{?_isa} = %{xrootd_ver} autoconf libtool chrpath
+Requires:	alice-environment-modules
+#Requires:	alice-xrootd%{?_isa} = %{xrootd_ver}
 
 %description
 AliEn for ALICE

@@ -2,16 +2,19 @@
 %global debug_package %{nil}
 # define alice dir sctucture
 
-%define alice_dir /opt/cern/alice
+# version
+%define alice_package_version 3.0.5
+# deps versions
+%define openssl_ver 0.9.8x
 
+%define alice_dir /opt/cern/alice
 %define package_name xrootd
 %define alice_name alice-%{package_name}
 %define alice_prefix %{alice_dir}/%{package_name}/%{version}
 %define alice_env_module_dir %{alice_dir}/env_modules
 
 # version and deps
-%define alice_package_version 3.0.5
-%define openssl_dir %{alice_dir}/openssl/0.9.8x
+%define openssl_dir %{alice_dir}/openssl/%{openssl_ver}
 
 Name:		%{alice_name}
 Version:	%{alice_package_version}
@@ -23,8 +26,9 @@ URL:		http://www.xrootd.org/
 Source0:	http://xrootd.slac.stanford.edu/download/v%{version}/xrootd-%{version}.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:	alice-openssl
-Requires:	alice-openssl
+BuildRequires:	alice-openssl%{?_isa} = %{openssl_ver}
+Requires:	alice-environment-modules
+#Requires:	alice-openssl%{?_isa} = %{openssl_ver}
 
 %description
 Xrootd for ALICE

@@ -1,6 +1,16 @@
 # no debug info is generated
 %global debug_package %{nil}
 
+# version
+%define alice_package_version 1.14.2
+
+#deps versions
+%define openssl_ver 0.9.8x
+%define xrootd_ver 3.0.5
+%define alien_ver 1.0.14n
+%define root_ver 5.33.02b
+
+
 %define package_name geant3
 %define alice_name alice-%{package_name}
 
@@ -8,12 +18,11 @@
 %define alice_prefix %{alice_dir}/%{package_name}/%{version}
 %define alice_env_module_dir %{alice_dir}/env_modules
 
-# version and deps
-%define alice_package_version 1.14.2
-%define openssl_dir %{alice_dir}/openssl/0.9.8x
-%define xrootd_dir %{alice_dir}/xrootd/3.0.5
-%define alien_dir %{alice_dir}/alien/1.0.14n
-%define rootsys_dir %{alice_dir}/root/5.33.02b
+# deps
+%define openssl_dir %{alice_dir}/openssl/%{openssl_ver}
+%define xrootd_dir %{alice_dir}/xrootd/%{xrootd_ver}
+%define alien_dir %{alice_dir}/alien/%{alien_ver}
+%define rootsys_dir %{alice_dir}/root/%{root_ver}
 
 
 
@@ -27,8 +36,9 @@ URL:		http://root.cern.ch/
 Source0:	%{name}-%{version}.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:	alice-root
-Requires:	alice-root
+BuildRequires:	alice-root%{?_isa} = %{root_ver}
+Requires:	alice-environment-modules
+#Requires:	alice-root%{?_isa} = %{root_ver}
 
 %description
 AliEn for ALICE
