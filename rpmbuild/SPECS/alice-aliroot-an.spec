@@ -39,7 +39,9 @@ BuildRequires:	alice-openssl%{?_isa} = %{openssl_ver}
 BuildRequires:	alice-xrootd%{?_isa} = %{xrootd_ver}
 BuildRequires:	alice-alien%{?_isa} = %{alien_ver}
 BuildRequires:	alice-root%{?_isa} = %{root_ver}
-BuildRequires:	alice-root-mathmore%{?_isa} = %{root_ver}
+#BuildRequires:	alice-root-mathmore%{?_isa} = %{root_ver}
+#BuildRequires:	alice-root-graf3d-eve%{?_isa} = %{root_ver}
+BuildRequires:	alice-root-genvector%{?_isa} = %{root_ver}
 BuildRequires:	alice-geant3%{?_isa} = %{geant3_ver}
 Requires:	alice-environment-modules
 #Requires:  alice-openssl%{?_isa} = %{openssl_ver}
