@@ -65,16 +65,16 @@ cat > %{buildroot}%{alice_prefix}/etc/modulefiles/%{alice_name}-%{alice_package_
 # AliRoot module for use with 'environment-modules' package:
 #
 prepend-path            PATH            %{xrootd_dir}/bin
-prepend-path            PATH            %{alien_dir}/bin
+prepend-path            PATH            %{alice_prefix}/bin
 prepend-path            LD_LIBRARY_PATH %{openssl_dir}/lib
 prepend-path            LD_LIBRARY_PATH %{xrootd_dir}/lib
-prepend-path            LD_LIBRARY_PATH %{alien_dir}/lib
+prepend-path            LD_LIBRARY_PATH %{alice_prefix}/lib
 setenv                  OPENSSL_DIR     %{openssl_dir}
 setenv                  XROOTD_DIR      %{xrootd_dir}
-setenv                  ALIEN_DIR       %{alien_dir}
-setenv                  X509_CERT_DIR   %{alien_dir}/share/certificates
+setenv                  ALIEN_DIR       %{alice_prefix}
+setenv                  X509_CERT_DIR   %{alice_prefix}/share/certificates
 setenv                  GSHELL_NO_GCC   1
-setenv                  GSHELL_ROOT     %{alien_dir}
+setenv                  GSHELL_ROOT     %{alice_prefix}
 EOF
 
 

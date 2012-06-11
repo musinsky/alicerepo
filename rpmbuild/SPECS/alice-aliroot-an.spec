@@ -27,7 +27,7 @@
 
 Name:		%{alice_name}
 Version:	%{alice_package_version}
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	AliRoot for ALICE
 Group:		System Environment/Daemons
 License:	LGPLv2+ 
@@ -39,7 +39,7 @@ BuildRequires:	alice-openssl%{?_isa} = %{openssl_ver}
 BuildRequires:	alice-xrootd%{?_isa} = %{xrootd_ver}
 BuildRequires:	alice-alien%{?_isa} = %{alien_ver}
 BuildRequires:	alice-root%{?_isa} = %{root_ver}
-#BuildRequires:	alice-root-mathmore%{?_isa} = %{root_ver}
+BuildRequires:	alice-root-proofd%{?_isa} = %{root_ver}
 #BuildRequires:	alice-root-graf3d-eve%{?_isa} = %{root_ver}
 BuildRequires:	alice-root-genvector%{?_isa} = %{root_ver}
 BuildRequires:	alice-geant3%{?_isa} = %{geant3_ver}
@@ -146,6 +146,8 @@ rm -rf %{buildroot}
 /etc/modulefiles/%{alice_name}-%{alice_package_version}-%{_arch}
 
 %changelog
+* Mon Jun 11 2012 Martin Vala <Martin.Vala@cern.ch> - 5.03.29-2
+- Added proofd dep
 
 * Mon Jun 11 2012 Martin Vala <Martin.Vala@cern.ch> - 5.03.29-1
 - First alice version

@@ -54,11 +54,11 @@ cat > %{buildroot}%{alice_prefix}/etc/modulefiles/%{alice_name}-%{alice_package_
 #
 # AliRoot module for use with 'environment-modules' package:
 #
-prepend-path            PATH            %{xrootd_dir}/bin
+prepend-path            PATH            %{alice_prefix}/bin
 prepend-path            LD_LIBRARY_PATH %{openssl_dir}/lib
-prepend-path            LD_LIBRARY_PATH %{xrootd_dir}/lib
+prepend-path            LD_LIBRARY_PATH %{alice_prefix}/lib
 setenv                  OPENSSL_DIR     %{openssl_dir}
-setenv                  XROOTD_DIR      %{xrootd_dir}
+setenv                  XROOTD_DIR      %{alice_prefix}
 EOF
 
 
