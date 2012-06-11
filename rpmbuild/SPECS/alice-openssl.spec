@@ -51,6 +51,7 @@ cat > %{buildroot}/%{alice_prefix}/etc/modulefiles/%{alice_name}-%{alice_package
 # alice-openssl module for use with 'environment-modules' package:
 # 
 prepend-path            LD_LIBRARY_PATH %{openssl_dir}/lib
+setenv                  OPENSSL_DIR     %{openssl_dir}
 EOF
 
 %clean

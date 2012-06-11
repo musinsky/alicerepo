@@ -57,6 +57,8 @@ cat > %{buildroot}%{alice_prefix}/etc/modulefiles/%{alice_name}-%{alice_package_
 prepend-path            PATH            %{xrootd_dir}/bin
 prepend-path            LD_LIBRARY_PATH %{openssl_dir}/lib
 prepend-path            LD_LIBRARY_PATH %{xrootd_dir}/lib
+setenv                  OPENSSL_DIR     %{openssl_dir}
+setenv                  XROOTD_DIR      %{xrootd_dir}
 EOF
 
 

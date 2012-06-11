@@ -69,6 +69,9 @@ prepend-path            PATH            %{alien_dir}/bin
 prepend-path            LD_LIBRARY_PATH %{openssl_dir}/lib
 prepend-path            LD_LIBRARY_PATH %{xrootd_dir}/lib
 prepend-path            LD_LIBRARY_PATH %{alien_dir}/lib
+setenv                  OPENSSL_DIR     %{openssl_dir}
+setenv                  XROOTD_DIR      %{xrootd_dir}
+setenv                  ALIEN_DIR       %{alien_dir}
 setenv                  X509_CERT_DIR   %{alien_dir}/share/certificates
 setenv                  GSHELL_NO_GCC   1
 setenv                  GSHELL_ROOT     %{alien_dir}

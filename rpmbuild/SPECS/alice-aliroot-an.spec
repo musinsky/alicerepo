@@ -2,7 +2,7 @@
 %global debug_package %{nil}
 
 # version
-%define alice_package_version 5.03.28
+%define alice_package_version 5.03.29
 
 #deps versions
 %define openssl_ver 0.9.8x
@@ -39,6 +39,7 @@ BuildRequires:	alice-openssl%{?_isa} = %{openssl_ver}
 BuildRequires:	alice-xrootd%{?_isa} = %{xrootd_ver}
 BuildRequires:	alice-alien%{?_isa} = %{alien_ver}
 BuildRequires:	alice-root%{?_isa} = %{root_ver}
+BuildRequires:	alice-root-mathmore%{?_isa} = %{root_ver}
 BuildRequires:	alice-geant3%{?_isa} = %{geant3_ver}
 Requires:	alice-environment-modules
 #Requires:  alice-openssl%{?_isa} = %{openssl_ver}
@@ -47,9 +48,8 @@ Requires:	alice-environment-modules
 Requires:	alice-root%{?_isa} = %{root_ver}
 Requires:	alice-root-net-alien%{?_isa} = %{root_ver}
 Requires:	alice-root-xproof%{?_isa} = %{root_ver}
-#Requires:	alice-root-montecarlo-vmc%{?_isa} = %{root_ver}
-Requires:	alice-root-pythia6-singlec%{?_isa} = %{root_ver}
-#Requires:  alice-geant3%{?_isa} = %{geant3_ver}
+Requires:	alice-root-pythia6-single%{?_isa} = %{root_ver}
+Requires:	alice-geant3%{?_isa} = %{geant3_ver}
 
 # define alice dir sctucture
 
@@ -98,6 +98,11 @@ prepend-path            LD_LIBRARY_PATH %{alien_dir}/lib
 prepend-path            LD_LIBRARY_PATH %{rootsys_dir}/lib
 prepend-path            LD_LIBRARY_PATH %{geant3_dir}/lib/tgt_$ALICE_TARGET
 prepend-path            LD_LIBRARY_PATH %{alice_prefix}/lib/tgt_$ALICE_TARGET
+setenv                  OPENSSL_DIR     %{openssl_dir}
+setenv                  XROOTD_DIR      %{xrootd_dir}
+setenv                  ALIEN_DIR       %{alien_dir}
+setenv                  ROOTSYS         %{rootsys_dir}
+setenv                  GEANT3          %{geant3_dir}
 setenv                  ALICE_ROOT      %{alice_prefix}
 setenv                  ALICE           %{alice_dir}
 setenv                  ALICE_TARGET    $ALICE_TARGET
@@ -139,3 +144,6 @@ rm -rf %{buildroot}
 /etc/modulefiles/%{alice_name}-%{alice_package_version}-%{_arch}
 
 %changelog
+
+* Mon Jun 11 2012 Martin Vala <Martin.Vala@cern.ch> - 5.03.29-1
+- First alice version

@@ -77,6 +77,11 @@ prepend-path            LD_LIBRARY_PATH %{xrootd_dir}/lib
 prepend-path            LD_LIBRARY_PATH %{alien_dir}/lib
 prepend-path            LD_LIBRARY_PATH %{rootsys_dir}/lib
 prepend-path            LD_LIBRARY_PATH %{geant3_dir}/lib/tgt_$ALICE_TARGET
+setenv                  OPENSSL_DIR     %{openssl_dir}
+setenv                  XROOTD_DIR      %{xrootd_dir}
+setenv                  ALIEN_DIR       %{alien_dir}
+setenv                  ROOTSYS         %{rootsys_dir}
+setenv                  GEANT3          %{geant3_dir}
 setenv                  X509_CERT_DIR   %{alien_dir}/share/certificates
 setenv                  GSHELL_NO_GCC   1
 setenv                  GSHELL_ROOT     %{alien_dir}
