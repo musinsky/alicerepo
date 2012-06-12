@@ -51,6 +51,9 @@ Requires:	alice-root%{?_isa} = %{root_ver}
 Requires:	alice-root-net-alien%{?_isa} = %{root_ver}
 Requires:	alice-root-xproof%{?_isa} = %{root_ver}
 Requires:	alice-root-pythia6-single%{?_isa} = %{root_ver}
+Requires:	alice-root-proof-sessionviewer%{?_isa} = %{root_ver}
+Requires:	alice-root-mathmore%{?_isa} = %{root_ver}
+Requires:	alice-root-minuit2%{?_isa} = %{root_ver}
 Requires:	alice-geant3%{?_isa} = %{geant3_ver}
 
 # define alice dir sctucture
