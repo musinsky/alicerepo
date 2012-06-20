@@ -6,7 +6,7 @@
 # deps versions
 %define xrootd_ver 3.0.5
 
-%define package_name alien
+%define package_name alien-client
 %define alice_name alice-%{package_name}
 
 %define alice_dir /opt/cern/alice

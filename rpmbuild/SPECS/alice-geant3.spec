@@ -21,7 +21,7 @@
 # deps
 %define openssl_dir %{alice_dir}/openssl/%{openssl_ver}
 %define xrootd_dir %{alice_dir}/xrootd/%{xrootd_ver}
-%define alien_dir %{alice_dir}/alien/%{alien_ver}
+%define alien_dir %{alice_dir}/alien-client/%{alien_ver}
 %define rootsys_dir %{alice_dir}/root/%{root_ver}
 
 

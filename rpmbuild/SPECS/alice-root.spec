@@ -17,7 +17,7 @@
 %define alice_package_version 5.33.02b
 %define openssl_dir %{alice_dir}/openssl/%{openssl_ver}
 %define xrootd_dir %{alice_dir}/xrootd/%{xrootd_ver}
-%define alien_dir %{alice_dir}/alien/%{alien_ver}
+%define alien_dir %{alice_dir}/alien-client/%{alien_ver}
 
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
@@ -142,7 +142,7 @@ BuildRequires:	desktop-file-utils
 BuildRequires:	dcap-devel
 BuildRequires:	dpm-devel
 BuildRequires:	alice-xrootd%{?_isa} = %{xrootd_ver}
-BuildRequires:	alice-alien%{?_isa} = %{alien_ver}
+BuildRequires:	alice-alien-client%{?_isa} = %{alien_ver}
 BuildRequires:	cfitsio-devel
 BuildRequires:	emacs
 BuildRequires:	emacs-el
@@ -874,7 +874,7 @@ the xrootd server.
 %package net-alien
 Summary:	AliEn for ROOT
 Group:		Applications/Engineering
-Requires:	alice-alien
+Requires:	alice-alien-client
 
 %description net-alien
 AliEn support for ROOT

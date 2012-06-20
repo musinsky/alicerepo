@@ -2,8 +2,10 @@
 %global debug_package %{nil}
 
 # version
-%define alice_package_version 5.03.29
+%define package_name aliroot-an
 
+%define alice_package_version 5.03.32
+%define	alice_fedora_rev 1
 #deps versions
 %define openssl_ver 0.9.8x
 %define xrootd_ver 3.0.5
@@ -11,7 +13,6 @@
 %define root_ver 5.33.02b
 %define geant3_ver 1.14.2
 
-%define package_name aliroot-an
 %define alice_name alice-%{package_name}
 
 %define alice_dir /opt/cern/alice
@@ -21,13 +22,13 @@
 # version and deps
 %define openssl_dir %{alice_dir}/openssl/%{openssl_ver}
 %define xrootd_dir %{alice_dir}/xrootd/%{xrootd_ver}
-%define alien_dir %{alice_dir}/alien/%{alien_ver}
+%define alien_dir %{alice_dir}/alien-client/%{alien_ver}
 %define rootsys_dir %{alice_dir}/root/%{root_ver}
 %define geant3_dir %{alice_dir}/geant3/%{geant3_ver}
 
 Name:		%{alice_name}
 Version:	%{alice_package_version}
-Release:	2%{?dist}
+Release:	%{alice_fedora_rev}%{?dist}
 Summary:	AliRoot for ALICE
 Group:		System Environment/Daemons
 License:	LGPLv2+ 
@@ -37,7 +38,7 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:	alice-environment-modules cmake
 BuildRequires:	alice-openssl%{?_isa} = %{openssl_ver}
 BuildRequires:	alice-xrootd%{?_isa} = %{xrootd_ver}
-BuildRequires:	alice-alien%{?_isa} = %{alien_ver}
+BuildRequires:	alice-alien-client%{?_isa} = %{alien_ver}
 BuildRequires:	alice-root%{?_isa} = %{root_ver}
 BuildRequires:	alice-root-proofd%{?_isa} = %{root_ver}
 #BuildRequires:	alice-root-graf3d-eve%{?_isa} = %{root_ver}
@@ -52,6 +53,7 @@ Requires:	alice-root-net-alien%{?_isa} = %{root_ver}
 Requires:	alice-root-xproof%{?_isa} = %{root_ver}
 Requires:	alice-root-pythia6-single%{?_isa} = %{root_ver}
 Requires:	alice-root-proof-sessionviewer%{?_isa} = %{root_ver}
+Requires:	alice-root-proofd%{?_isa} = %{root_ver}
 Requires:	alice-root-mathmore%{?_isa} = %{root_ver}
 Requires:	alice-root-minuit2%{?_isa} = %{root_ver}
 Requires:	alice-geant3%{?_isa} = %{geant3_ver}
