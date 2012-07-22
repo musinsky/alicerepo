@@ -4,14 +4,14 @@
 # version
 %define package_name aliroot-an
 
-%define alice_package_version 5.03.32
+%define alice_package_version 5.03.42
 %define	alice_fedora_rev 1
 #deps versions
 %define openssl_ver 0.9.8x
 %define xrootd_ver 3.0.5
 %define alien_ver 1.0.14n
-%define root_ver 5.33.02b
-%define geant3_ver 1.14.2
+%define root_ver 5.34.01
+%define geant3_ver 1.14.4
 
 %define alice_name alice-%{package_name}
 

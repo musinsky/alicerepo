@@ -14,7 +14,7 @@
 %define alice_env_module_dir %{alice_dir}/env_modules
 
 # version and deps
-%define alice_package_version 5.33.02b
+%define alice_package_version 5.34.01
 %define openssl_dir %{alice_dir}/openssl/%{openssl_ver}
 %define xrootd_dir %{alice_dir}/xrootd/%{xrootd_ver}
 %define alien_dir %{alice_dir}/alien-client/%{alien_ver}
@@ -61,7 +61,7 @@ URL:		http://root.cern.ch/
 #		rm -rf root/fonts
 #		mv root root-%{version}
 #		tar -z -c -f root-%{version}.tar.gz root-%{version}
-Source0:	root-%{version}.tar.gz
+Source0:	root_v%{version}.source.tar.gz
 #		Script to extract the list of include files in a subpackage
 Source1:	alice-root-includelist
 #		Documentation generation script
@@ -909,30 +909,30 @@ Group:		Applications/Engineering
 This package contains a library for browsing an interactive PROOF
 session in ROOT.
 
-%package clarens
-Summary:	Clarens extension for ROOT
-Group:		Applications/Engineering
+#%package clarens
+#Summary:	Clarens extension for ROOT
+#Group:		Applications/Engineering
 
-%description clarens
-This package contains the Clarens extension for ROOT, for use in a
-GRID enabled analysis environment.
+#%description clarens
+#This package contains the Clarens extension for ROOT, for use in a
+#GRID enabled analysis environment.
+#
+#The Clarens Grid-Enabled Web Services Framework is an open source,
+#secure, high-performance "portal" for ubiquitous access to data and
+#computational resources provided by computing grids.
 
-The Clarens Grid-Enabled Web Services Framework is an open source,
-secure, high-performance "portal" for ubiquitous access to data and
-computational resources provided by computing grids.
-
-%package peac
-Summary:	PEAC extension for ROOT - run-time libraries
-Group:		Applications/Engineering
-
-%description peac
-This package contains the PEAC (Proof Enabled Analysis Center)
-extension for ROOT.
-
-PEAC is an interactive distributed analysis framework that uses
-Clarens as a "glue" protocol to advertise and communicate amongst
-SAM, Global Manager (GM), Local Manager (LM), DCache, and PROOF
-services.
+#%package peac
+#Summary:	PEAC extension for ROOT - run-time libraries
+#Group:		Applications/Engineering
+#
+#%description peac
+#This package contains the PEAC (Proof Enabled Analysis Center)
+#extension for ROOT.
+#
+#PEAC is an interactive distributed analysis framework that uses
+#Clarens as a "glue" protocol to advertise and communicate amongst
+#SAM, Global Manager (GM), Local Manager (LM), DCache, and PROOF
+#services.
 
 %package xproof
 Summary:	XPROOF extension for ROOT
@@ -1066,7 +1066,8 @@ do not need to install this package to run root. Install the emacs-root
 package to use root with GNU Emacs.
 
 %prep
-%setup -q -n root-%{version}
+#%setup -q -n root-%{version}
+%setup -q -n root
 if pkg-config --max-version 2.1.2 ftgl ; then
 %patch0 -p1
 fi
@@ -1173,7 +1174,6 @@ export ROOTSYS="%{alice_prefix}"
 	    --enable-asimage \
 	    --enable-astiff \
 	    --enable-bonjour \
-	    --enable-clarens \
 	    --enable-dcache \
 	    --enable-explicitlink \
 	    --enable-fftw3 \
@@ -1191,7 +1191,6 @@ export ROOTSYS="%{alice_prefix}"
 	    --enable-mysql \
 	    --enable-odbc \
 	    --enable-opengl \
-	    --enable-peac \
 	    --enable-pgsql \
 	    --enable-python \
 %if %{?fedora}%{!?fedora:0} >= 9 || %{?rhel}%{!?rhel:0} >= 6
@@ -1383,7 +1382,7 @@ rm ${RPM_BUILD_ROOT}%{_datadir}/proof/*.sample
 rm -rf ${RPM_BUILD_ROOT}%{_datadir}/proof/utils
 rm ${RPM_BUILD_ROOT}%{_datadir}/root.desktop
 rm ${RPM_BUILD_ROOT}%{_datadir}/system.plugins-ios
-#rm ${RPM_BUILD_ROOT}%{_datadir}/svninfo.txt
+rm ${RPM_BUILD_ROOT}%{_datadir}/svninfo.txt
 %if %{?fedora}%{!?fedora:0} < 17 && %{?rhel}%{!?rhel:0} < 6
 rm ${RPM_BUILD_ROOT}%{_libdir}/libAfterImage.a
 %endif
@@ -1724,10 +1723,10 @@ fi
 %postun proof -p /sbin/ldconfig
 %post proof-sessionviewer -p /sbin/ldconfig
 %postun proof-sessionviewer -p /sbin/ldconfig
-%post clarens -p /sbin/ldconfig
-%postun clarens -p /sbin/ldconfig
-%post peac -p /sbin/ldconfig
-%postun peac -p /sbin/ldconfig
+#%post clarens -p /sbin/ldconfig
+#%postun clarens -p /sbin/ldconfig
+#%post peac -p /sbin/ldconfig
+#%postun peac -p /sbin/ldconfig
 %post xproof -p /sbin/ldconfig
 %postun xproof -p /sbin/ldconfig
 %post roofit -p /sbin/ldconfig
@@ -1768,6 +1767,7 @@ fi
 %{alice_prefix}/icons/hicolor/48x48/mimetypes/application-x-root.png
 %{_datadir}/mime/packages/root.xml
 %{_datadir}/modulefiles
+%{_datadir}/cmake/*
 
 %files icons
 %defattr(-,root,root,-)
@@ -2315,15 +2315,15 @@ fi
 %{_datadir}/plugins/TProofProgressLog/P010_TProofProgressLog.C
 %{_datadir}/plugins/TSessionViewer/P010_TSessionViewer.C
 
-%files clarens -f includelist-proof-clarens
-%defattr(-,root,root,-)
-%{_libdir}/libClarens.*
+#%files clarens -f includelist-proof-clarens
+#%defattr(-,root,root,-)
+#%{_libdir}/libClarens.*
 
-%files peac -f includelist-proof-peac
-%defattr(-,root,root,-)
-%{_libdir}/libPeac.*
-%{_libdir}/libPeacGui.*
-%{_datadir}/plugins/TProof/P030_TProofPEAC.C
+#%files peac -f includelist-proof-peac
+#%defattr(-,root,root,-)
+#%{_libdir}/libPeac.*
+#%{_libdir}/libPeacGui.*
+#%{_datadir}/plugins/TProof/P030_TProofPEAC.C
 
 %files xproof -f includelist-proof-proofx
 %defattr(-,root,root,-)

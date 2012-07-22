@@ -1,13 +1,5 @@
 [alice]
 name=alice
-#baseurl=file:///mnt/alice/RPMS/fedora/17/
-baseurl=http://pcalike01.cern.ch/alice/RPMS/fedora/17/
-enabled=1
-gpgcheck=0
-
-
-[alice-srpm]
-name=alice-srpm
-baseurl=http://pcalike01.cern.ch/alice/SRPMS/
+baseurl=http://lx002.saske.sk/repos/fedora/17/$basearch
 enabled=1
 gpgcheck=0
