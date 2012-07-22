@@ -6,8 +6,10 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-SVN_PATH1="root_svn$1"
-SVN_PATH2="root_v$1"
+ROOT_VER=${1//-/.}
+
+SVN_PATH1="root_svn_$ROOT_VER"
+SVN_PATH2="root_v$ROOT_VER.source"
 
 svn co https://root.cern.ch/svn/root/tags/v$1 $SVN_PATH1
 svn -q export $SVN_PATH1 $SVN_PATH2
