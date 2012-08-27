@@ -1,0 +1,16 @@
+--- blender-2.44/release/plugins/bmake.bid	2004-12-27 20:28:48.000000000 +0100
++++ blender-2.44/release/plugins/bmake	2007-08-09 18:13:34.000000000 +0200
+@@ -60,10 +60,10 @@ elif ( test $UNAME = "OpenBSD" ) then
+ 	LDFLAGS="-Bshareable";
+ elif ( test $UNAME = "Linux" ) then
+ 	CC="gcc";
+-	CFLAGS="-fPIC -funsigned-char -O2";
++	CFLAGS="${RPM_OPT_FLAGS} -fPIC -funsigned-char";
+ 
+-	LD="ld";
+-	LDFLAGS="-Bshareable";
++	LD="gcc";
++	LDFLAGS="--shared ${RPM_OPT_FLAGS}";
+ elif ( test $UNAME = "SunOS" ) then
+ 	CC="cc";
+ 	CFLAGS="-O";
