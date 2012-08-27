@@ -1,0 +1,112 @@
+#!/bin/bash
+
+ALIROOT_MODULE_DIR="/etc/modulefiles"
+ALIROOT_BASHRC_FILE="$HOME/.bashrc"
+ALIROOT_VERSIPN_FILE="/usr"
+
+if [ ! -d $ALIROOT_MODULE_DIR ];then
+  echo "Version config files missing in '$ALIROOT_MODULE_DIR' !!!"
+  exit 1
+fi
+
+function CheckActiveAliRoot() {
+  # check first active aliroot (i case of that there are more)
+  MY_ALIROOT_ACTIVE_MODULE=""
+  MY_LOADEDMODULES="${LOADEDMODULES//:/ }"
+  for MOD in $MY_LOADEDMODULES;do
+    if [[ "$MOD" == alice-aliroot-an* ]];then
+      MY_ALIROOT_ACTIVE_MODULE="$MOD"
+    fi
+    if [ -n "$MY_ALIROOT_ACTIVE_MODULE" ];then
+      break
+    fi
+  done
+  echo "$MY_ALIROOT_ACTIVE_MODULE"
+}
+
+
+function ListAliRootModules() {
+  echo ""
+  echo "AliROOT versions available:"
+  echo ""
+  for MOD in `ls -1t $ALIROOT_MODULE_DIR`;do
+    if [[ "$MOD" == alice-aliroot-an* ]];then
+      if [ "$MOD" = "$ALIROOT_ACTIVE_MODULE" ];then
+        MY_STAR="*"
+      else
+        MY_STAR=" "
+      fi
+      echo " $MY_STAR $MOD"
+    fi
+  done
+  echo ""
+}
+
+function SetAliRootModule() {
+  if [ -z "$1" ];then
+    echo "No version !!!"
+    return 1
+  fi
+
+  if [ ! -f $ALIROOT_MODULE_DIR/$1 ];then
+    echo "AliRoot Version '$1' is not available !!!"
+    return 2
+  fi
+
+  if [ ! -f $ALIROOT_BASHRC_FILE ];then
+    echo "$ALIROOT_BASHRC_FILE doesn't exist"
+    return 3
+  fi
+
+  IS_MOD_IN_BASHRC=$(cat $ALIROOT_BASHRC_FILE | grep 'module add')
+  if [ -z "$IS_MOD_IN_BASHRC" ];then
+    echo "" >> $ALIROOT_BASHRC_FILE
+    echo "# ALICE stuff" >> $ALIROOT_BASHRC_FILE
+    echo "$ALIROOT_VERSIPN_FILE/bin/aliroot-version latest || module add \$(ls -1t \$HOME/.alice/ | head -n 1)" >> $ALIROOT_BASHRC_FILE
+    echo "# end ALICE stuff" >> $ALIROOT_BASHRC_FILE
+    echo "" >> $ALIROOT_BASHRC_FILE
+  fi
+
+  rm -Rf $HOME/.alice 
+  mkdir -p $HOME/.alice
+  cp $ALIROOT_MODULE_DIR/$1 $HOME/.alice/
+
+  echo 
+  echo "To apply changes do now  :"
+  echo ""
+  echo "  module add $1"
+  echo ""
+
+}
+
+function UpdateToLatest() {
+  if [ -d $HOME/.alice ];then
+    MY_MODULE=$(ls -1t $HOME/.alice/ | head -n 1)
+    if [ -n "$MY_MODULE" ];then
+      if [ ! -f "/etc/modulefiles/$MY_MODULE" ];then
+        rm -Rf $HOME/.alice/
+        mkdir -p $HOME/.alice
+        MY_LATEST_MODULE=$(cd /etc/modulefiles/ ;ls -1t alice-aliroot-an* | head -n 1)
+        if [ -n "$MY_LATEST_MODULE" ];then
+          echo "Updating to $MY_LATEST_MODULE"
+          cp /etc/modulefiles/$MY_LATEST_MODULE $HOME/.alice/
+          return 1
+        fi
+      else
+        return 1
+      fi
+    fi
+  fi
+  return 0
+}
+
+ALIROOT_ACTIVE_MODULE="$(CheckActiveAliRoot)"
+
+if [ "$1" = "set" ];then
+  SetAliRootModule $2
+elif [ "$1" = "latest" ];then
+  UpdateToLatest
+else
+  ALIROOT_ACTIVE_MODULE="$(CheckActiveAliRoot)"
+  ListAliRootModules
+fi

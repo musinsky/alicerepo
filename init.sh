@@ -1,0 +1,2 @@
+# ROOT deps
+yum install ftgl-devel glew-devel gl2ps-devel pcre-devel xz-devel libAfterImage-devel ncurses-devel avahi-compat-libdns_sd-devel avahi-devel xmlrpc-c-devel fftw-devel gsl-devel unuran-devel openldap-devel mysql-devel unixODBC-devel postgresql-devel python-devel qt4-devel qt4-webkit-devel ruby ruby-devel globus-gss-assist-devel globus-gsi-credential-devel globus-proxy-utils libtool-ltdl-devel dcap-devel dpm-devel xrootd-devel cfitsio-devel emacs emacs-el graphviz-devel expat-devel

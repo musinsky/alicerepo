@@ -5,18 +5,18 @@
 %define alice_name alice-%{package_name}
 
 %define alice_dir /opt/cern/alice
-%define alice_prefix %{alice_dir}/%{package_name}/%{version}
+%define alice_prefix %{alice_dir}/%{package_name}/%{alice_package_version}
 %define alice_env_module_dir %{alice_dir}/env_modules
 
 %define debug_package %{nil}
 
-Name:           %{alice_name}
-Version:        %{alice_package_version}
-Release:        4%{?dist}
+Name:           %{alice_name}-%{alice_package_version}
+Version:        0
+Release:        0%{?dist}
 Summary:        A general purpose cryptography library with TLS implementation
 License:        OpenSSL
 URL:            http://www.openssl.org/
-Source:         http://www.openssl.org/source/%{package_name}-%{version}.tar.gz
+Source:         http://www.openssl.org/source/%{package_name}-%{alice_package_version}.tar.gz
 Patch:          openssl-0.9.8-no-rpath.patch
 BuildRequires:  coreutils, perl, sed, zlib-devel
 Requires:       alice-environment-modules coreutils
@@ -30,7 +30,7 @@ protocols.
 ALICE notes: needed only libcrypto.so, libssl.so and include dir
 
 %prep
-%setup -q -n %{package_name}-%{version}
+%setup -q -n %{package_name}-%{alice_package_version}
 %patch -p1 -b .no-rpath
 
 %build

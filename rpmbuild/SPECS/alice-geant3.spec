@@ -15,7 +15,7 @@
 %define alice_name alice-%{package_name}
 
 %define alice_dir /opt/cern/alice
-%define alice_prefix %{alice_dir}/%{package_name}/%{version}
+%define alice_prefix %{alice_dir}/%{package_name}/%{alice_package_version}
 %define alice_env_module_dir %{alice_dir}/env_modules
 
 # deps
@@ -26,25 +26,24 @@
 
 
 
-Name:		%{alice_name}
-Version:	%{alice_package_version}
-Release:	1%{?dist}
+Name:		%{alice_name}-%{alice_package_version}
+Version:	0
+Release:	0%{?dist}
 Summary:	Geant3 for ALICE
 Group:		System Environment/Daemons
 License:	LGPLv2+ 
 URL:		http://root.cern.ch/
-Source0:	%{name}-%{version}.tar.gz
+Source0:	%{name}.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:	alice-root%{?_isa} = %{root_ver}
+BuildRequires:	alice-root-%{root_ver}
 Requires:	alice-environment-modules
-#Requires:	alice-root%{?_isa} = %{root_ver}
 
 %description
 AliEn for ALICE
 
 %prep
-%setup -q -n %{name}-%{version}
+%setup -q -n %{name}
 
 %build
 export ROOTSYS="%{rootsys_dir}"

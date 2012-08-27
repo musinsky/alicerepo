@@ -4,8 +4,8 @@
 # version
 %define package_name aliroot-an
 
-%define alice_package_version 5.03.42
-%define	alice_fedora_rev 1
+%define alice_package_version 5.03.52
+%define	alice_fedora_rev 0
 #deps versions
 %define openssl_ver 0.9.8x
 %define xrootd_ver 3.0.5
@@ -16,7 +16,7 @@
 %define alice_name alice-%{package_name}
 
 %define alice_dir /opt/cern/alice
-%define alice_prefix %{alice_dir}/%{package_name}/%{version}
+%define alice_prefix %{alice_dir}/%{package_name}/%{alice_package_version}
 %define alice_env_module_dir %{alice_dir}/env_modules
 
 # version and deps
@@ -26,37 +26,34 @@
 %define rootsys_dir %{alice_dir}/root/%{root_ver}
 %define geant3_dir %{alice_dir}/geant3/%{geant3_ver}
 
-Name:		%{alice_name}
-Version:	%{alice_package_version}
+Name:		%{alice_name}-%{alice_package_version}
+Version:	0
 Release:	%{alice_fedora_rev}%{?dist}
 Summary:	AliRoot for ALICE
 Group:		System Environment/Daemons
 License:	LGPLv2+ 
 URL:		http://aliceinfo.cern.ch/
-Source0:	%{name}-%{version}.tar.gz
+Source0:	%{name}.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:	alice-environment-modules cmake
-BuildRequires:	alice-openssl%{?_isa} = %{openssl_ver}
-BuildRequires:	alice-xrootd%{?_isa} = %{xrootd_ver}
-BuildRequires:	alice-alien-client%{?_isa} = %{alien_ver}
-BuildRequires:	alice-root%{?_isa} = %{root_ver}
-BuildRequires:	alice-root-proofd%{?_isa} = %{root_ver}
-#BuildRequires:	alice-root-graf3d-eve%{?_isa} = %{root_ver}
-BuildRequires:	alice-root-genvector%{?_isa} = %{root_ver}
-BuildRequires:	alice-geant3%{?_isa} = %{geant3_ver}
+BuildRequires:	alice-openssl-%{openssl_ver}
+BuildRequires:	alice-xrootd-%{xrootd_ver}
+BuildRequires:	alice-alien-client-%{alien_ver}
+BuildRequires:	alice-root-%{root_ver}
+BuildRequires:	alice-root-%{root_ver}-proofd
+#BuildRequires:	alice-root-%{root_ver}-graf3d-eve
+BuildRequires:	alice-root-%{root_ver}-genvector
+BuildRequires:	alice-geant3-%{geant3_ver}
 Requires:	alice-environment-modules
-#Requires:  alice-openssl%{?_isa} = %{openssl_ver}
-#Requires:  alice-xrootd%{?_isa} = %{xrootd_ver}
-#Requires:  alice-alien%{?_isa} = %{alien_ver}
-Requires:	alice-root%{?_isa} = %{root_ver}
-Requires:	alice-root-net-alien%{?_isa} = %{root_ver}
-Requires:	alice-root-xproof%{?_isa} = %{root_ver}
-Requires:	alice-root-pythia6-single%{?_isa} = %{root_ver}
-Requires:	alice-root-proof-sessionviewer%{?_isa} = %{root_ver}
-Requires:	alice-root-proofd%{?_isa} = %{root_ver}
-Requires:	alice-root-mathmore%{?_isa} = %{root_ver}
-Requires:	alice-root-minuit2%{?_isa} = %{root_ver}
-Requires:	alice-geant3%{?_isa} = %{geant3_ver}
+Requires:	alice-root-%{root_ver}
+Requires:	alice-root-%{root_ver}-net-alien
+Requires:	alice-root-%{root_ver}-xproof
+Requires:	alice-root-%{root_ver}-pythia6-single
+Requires:	alice-root-%{root_ver}-proof-sessionviewer
+Requires:	alice-root-%{root_ver}-proofd
+Requires:	alice-root-%{root_ver}-mathmore
+Requires:	alice-root-%{root_ver}-minuit2
+Requires:	alice-geant3-%{geant3_ver}
 
 # define alice dir sctucture
 
@@ -64,7 +61,7 @@ Requires:	alice-geant3%{?_isa} = %{geant3_ver}
 AliRoot for ALICE
 
 %prep
-%setup -q -n %{name}-%{version}
+%setup -q -n %{name}
 
 %build
 export ROOTSYS="%{rootsys_dir}"
@@ -87,8 +84,18 @@ cd build
 make install DESTDIR=%{buildroot}/
 export PATH="%{rootsys_dir}/bin:$PATH"
 export ALICE_TARGET="$(root-config --arch)"
-# create module file
 
+# creating pars
+make par-all
+mkdir -p %{buildroot}%{alice_prefix}/pars
+mv *.par %{buildroot}%{alice_prefix}/pars/
+
+# copy * from source (TODO copy only headers)
+cd ../
+rm -Rf build
+cp -rf * %{buildroot}%{alice_prefix}
+
+# create module file
 mkdir -p %{buildroot}%{alice_prefix}/etc/modulefiles
 cat > %{buildroot}%{alice_prefix}/etc/modulefiles/%{alice_name}-%{alice_package_version}-%{_arch} <<EOF
 #%Module 1.0

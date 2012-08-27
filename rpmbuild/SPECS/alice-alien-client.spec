@@ -10,24 +10,24 @@
 %define alice_name alice-%{package_name}
 
 %define alice_dir /opt/cern/alice
-%define alice_prefix %{alice_dir}/%{package_name}/%{version}
+%define alice_prefix %{alice_dir}/%{package_name}/%{alice_package_version}
 %define alice_env_module_dir %{alice_dir}/env_modules
 
 # deps
 %define xrootd_dir %{alice_dir}/xrootd/%{xrootd_ver}
 
 
-Name:		%{alice_name}
-Version:	%{alice_package_version}
-Release:	1%{?dist}
+Name:		%{alice_name}-%{alice_package_version}
+Version:	0
+Release:	0%{?dist}
 Summary:	AliEn for ALICE
 Group:		System Environment/Daemons
 License:	BSD
 URL:		http://alien.cern.ch/
-Source0:	"http://alitorrent.cern.ch/src/xalienfs/xrootd-xalienfs-%{version}.tar.gz
+Source0:	"http://alitorrent.cern.ch/src/xalienfs/xrootd-xalienfs-%{alice_package_version}.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:	alice-xrootd%{?_isa} = %{xrootd_ver} autoconf libtool chrpath
+BuildRequires:	alice-xrootd-%{xrootd_ver} autoconf libtool chrpath
 Requires:	alice-environment-modules
 #Requires:	alice-xrootd%{?_isa} = %{xrootd_ver}
 
@@ -35,7 +35,7 @@ Requires:	alice-environment-modules
 AliEn for ALICE
 
 %prep
-%setup -q -n xrootd-xalienfs-%{version}
+%setup -q -n xrootd-xalienfs-%{alice_package_version}
 
 %build
 rm -Rf autom4te.cache

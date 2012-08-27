@@ -10,7 +10,7 @@
 %define alice_name alice-%{package_name}
 
 %define alice_dir /opt/cern/alice
-%define alice_prefix %{alice_dir}/%{package_name}/%{version}
+%define alice_prefix %{alice_dir}/%{package_name}/%{alice_package_version}
 %define alice_env_module_dir %{alice_dir}/env_modules
 
 # version and deps
@@ -46,10 +46,10 @@
 #%global emacs_lispdir %(pkg-config emacs --variable sitepkglispdir)
 #%endif
 
-Name:		%{alice_name}
-Version:	%{alice_package_version}
+Name:		%{alice_name}-%{alice_package_version}
+Version:	0
 %global libversion %(cut -d. -f 1-2 <<< %{version})
-Release:	2%{?dist}
+Release:	0%{?dist}
 Summary:	Numerical data analysis framework
 
 Group:		Applications/Engineering
@@ -61,7 +61,7 @@ URL:		http://root.cern.ch/
 #		rm -rf root/fonts
 #		mv root root-%{version}
 #		tar -z -c -f root-%{version}.tar.gz root-%{version}
-Source0:	root_v%{version}.source.tar.gz
+Source0:	root_v%{alice_package_version}.source.tar.gz
 #		Script to extract the list of include files in a subpackage
 Source1:	alice-root-includelist
 #		Documentation generation script
@@ -71,16 +71,16 @@ Source3:	http://root.cern.ch/drupal/sites/default/files/rootdrawing-logo.png
 Source4:	http://root.cern.ch/drupal/sites/all/themes/newsflash/images/blue/root-banner.png
 Source5:	http://root.cern.ch/drupal/sites/all/themes/newsflash/images/info.png
 #		Patch for ftgl older than version 2.1.3:
-Patch0:		%{name}-ftgl.patch
+Patch0:		%{alice_name}-ftgl.patch
 #		Use system fonts:
-Patch1:		%{name}-fontconfig.patch
+Patch1:		%{alice_name}-fontconfig.patch
 #		Use system unuran:
-Patch2:		%{name}-unuran.patch
+Patch2:		%{alice_name}-unuran.patch
 #		Fixes for xrootd bonjour
-Patch3:		%{name}-xrootd.patch
+Patch3:		%{alice_name}-xrootd.patch
 #		Fix hardcoded include path
 #		https://savannah.cern.ch/bugs/index.php?91463
-Patch4:		%{name}-meta.patch
+Patch4:		%{alice_name}-meta.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 #		The build segfaults on ppc64 during an invocation of cint:
 #		https://savannah.cern.ch/bugs/index.php?70542
@@ -133,7 +133,7 @@ BuildRequires:	qt4-webkit-devel
 %endif
 BuildRequires:	ruby
 BuildRequires:	ruby-devel
-BuildRequires:	alice-openssl%{?_isa} = %{openssl_ver}
+BuildRequires:	alice-openssl-%{openssl_ver}
 BuildRequires:	globus-gss-assist-devel
 BuildRequires:	globus-gsi-credential-devel
 BuildRequires:	globus-proxy-utils
@@ -141,8 +141,8 @@ BuildRequires:	libtool-ltdl-devel
 BuildRequires:	desktop-file-utils
 BuildRequires:	dcap-devel
 BuildRequires:	dpm-devel
-BuildRequires:	alice-xrootd%{?_isa} = %{xrootd_ver}
-BuildRequires:	alice-alien-client%{?_isa} = %{alien_ver}
+BuildRequires:	alice-xrootd-%{xrootd_ver}
+BuildRequires:	alice-alien-client-%{alien_ver}
 BuildRequires:	cfitsio-devel
 BuildRequires:	emacs
 BuildRequires:	emacs-el
@@ -874,7 +874,7 @@ the xrootd server.
 %package net-alien
 Summary:	AliEn for ROOT
 Group:		Applications/Engineering
-Requires:	alice-alien-client
+Requires:	alice-alien-client-%{alien_ver}
 
 %description net-alien
 AliEn support for ROOT
@@ -908,31 +908,6 @@ Group:		Applications/Engineering
 %description proof-sessionviewer
 This package contains a library for browsing an interactive PROOF
 session in ROOT.
-
-#%package clarens
-#Summary:	Clarens extension for ROOT
-#Group:		Applications/Engineering
-
-#%description clarens
-#This package contains the Clarens extension for ROOT, for use in a
-#GRID enabled analysis environment.
-#
-#The Clarens Grid-Enabled Web Services Framework is an open source,
-#secure, high-performance "portal" for ubiquitous access to data and
-#computational resources provided by computing grids.
-
-#%package peac
-#Summary:	PEAC extension for ROOT - run-time libraries
-#Group:		Applications/Engineering
-#
-#%description peac
-#This package contains the PEAC (Proof Enabled Analysis Center)
-#extension for ROOT.
-#
-#PEAC is an interactive distributed analysis framework that uses
-#Clarens as a "glue" protocol to advertise and communicate amongst
-#SAM, Global Manager (GM), Local Manager (LM), DCache, and PROOF
-#services.
 
 %package xproof
 Summary:	XPROOF extension for ROOT
@@ -1723,10 +1698,6 @@ fi
 %postun proof -p /sbin/ldconfig
 %post proof-sessionviewer -p /sbin/ldconfig
 %postun proof-sessionviewer -p /sbin/ldconfig
-#%post clarens -p /sbin/ldconfig
-#%postun clarens -p /sbin/ldconfig
-#%post peac -p /sbin/ldconfig
-#%postun peac -p /sbin/ldconfig
 %post xproof -p /sbin/ldconfig
 %postun xproof -p /sbin/ldconfig
 %post roofit -p /sbin/ldconfig
