@@ -4,7 +4,7 @@
 # version
 %define package_name aliroot-an
 
-%define alice_package_version 5.03.52
+%define alice_package_version 5.03.62
 %define	alice_fedora_rev 0
 #deps versions
 %define openssl_ver 0.9.8x
@@ -48,11 +48,13 @@ Requires:	alice-environment-modules
 Requires:	alice-root-%{root_ver}
 Requires:	alice-root-%{root_ver}-net-alien
 Requires:	alice-root-%{root_ver}-xproof
+Requires:	alice-root-%{root_ver}-proof-bench
 Requires:	alice-root-%{root_ver}-pythia6-single
 Requires:	alice-root-%{root_ver}-proof-sessionviewer
 Requires:	alice-root-%{root_ver}-proofd
 Requires:	alice-root-%{root_ver}-mathmore
 Requires:	alice-root-%{root_ver}-minuit2
+Requires:	alice-root-%{root_ver}-genvector
 Requires:	alice-geant3-%{geant3_ver}
 
 # define alice dir sctucture

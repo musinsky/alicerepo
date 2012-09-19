@@ -12,7 +12,7 @@
 Name:           blender-nonfree
 Epoch:		1
 Version:        %{blender_api}a
-Release: 	2%{?dist}
+Release: 	4%{?dist}
 
 Summary:        3D modeling, animation, rendering and post-production
 
