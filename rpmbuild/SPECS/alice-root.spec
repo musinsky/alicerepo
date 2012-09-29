@@ -39,7 +39,7 @@
 %endif
 
 #%if %($(pkg-config emacs) ; echo $?)
-%global emacs_version 21.4
+%global emacs_version 24.1
 %global emacs_lispdir %{alice_prefix}/build/misc
 #%else
 #%global emacs_version %(pkg-config emacs --modversion)
@@ -146,6 +146,7 @@ BuildRequires:	alice-alien-client-%{alien_ver}
 BuildRequires:	cfitsio-devel
 BuildRequires:	emacs
 BuildRequires:	emacs-el
+BuildRequires:  util-linux-ng
 BuildRequires:	gcc-gfortran
 BuildRequires:	graphviz-devel
 %if "%{?rhel}" == "5"
@@ -1017,11 +1018,11 @@ Group:		Applications/Engineering
 BuildArch:	noarch
 %endif
 Requires:	%{name} = %{version}-%{release}
-%if "%{?rhel}" == "5"
-Requires:	emacs >= %{emacs_version}
-%else
-Requires:	emacs(bin) >= %{emacs_version}
-%endif
+#%if "%{?rhel}" == "5"
+#Requires:	emacs >= %{emacs_version}
+#%else
+#Requires:	emacs(bin) >= %{emacs_version}
+#%endif
 
 %description -n emacs-%{name}
 emacs-root is an add-on package for GNU Emacs. It provides integration
@@ -1041,7 +1042,7 @@ do not need to install this package to run root. Install the emacs-root
 package to use root with GNU Emacs.
 
 %prep
-#%setup -q -n root-%{version}
+#%setup -q -n root_v%{alice_package_version}.source
 %setup -q -n root
 if pkg-config --max-version 2.1.2 ftgl ; then
 %patch0 -p1

@@ -37,6 +37,9 @@ Source0:	%{name}.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:	alice-root-%{root_ver}
+BuildRequires:  alice-root-%{root_ver}-core
+BuildRequires:  alice-root-%{root_ver}-montecarlo-vmc
+BuildRequires:  alice-root-%{root_ver}-physics
 Requires:	alice-environment-modules
 
 %description

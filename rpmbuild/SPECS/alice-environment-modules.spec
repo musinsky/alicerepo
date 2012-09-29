@@ -1,6 +1,6 @@
 %define package_name environment-modules
 %define alice_name alice-%{package_name}
-%define alice_package_version 1.1.3
+%define alice_package_version 1.1.5
 
 Name:		%{alice_name}
 Version:	%{alice_package_version}
