@@ -4,7 +4,7 @@
 # version
 %define package_name aliroot-an
 
-%define alice_package_version 5.03.65
+%define alice_package_version 5.03.66
 %define	alice_fedora_rev 0
 #deps versions
 %define openssl_ver 0.9.8x
@@ -35,7 +35,10 @@ License:	LGPLv2+
 URL:		http://aliceinfo.cern.ch/
 Source0:	%{name}.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildRequires:	alice-environment-modules cmake subversion
+BuildRequires:	alice-environment-modules cmake subversion gcc-gfortran
+BuildRequires:  mesa-libGL-devel
+BuildRequires:  mesa-libGLU-devel
+BuildRequires:  glew-devel
 BuildRequires:	alice-openssl-%{openssl_ver}
 BuildRequires:	alice-xrootd-%{xrootd_ver}
 BuildRequires:	alice-alien-client-%{alien_ver}
@@ -54,6 +57,7 @@ BuildRequires:	alice-root-%{root_ver}-genvector
 BuildRequires:  alice-root-%{root_ver}-io-xml
 BuildRequires:  alice-root-%{root_ver}-mlp
 BuildRequires:  alice-root-%{root_ver}-spectrum
+BuildRequires:  alice-root-%{root_ver}-montecarlo-vmc
 BuildRequires:	alice-geant3-%{geant3_ver}
 Requires:	alice-environment-modules
 Requires:	alice-root-%{root_ver}
@@ -66,6 +70,7 @@ Requires:	alice-root-%{root_ver}-proofd
 Requires:	alice-root-%{root_ver}-mathmore
 Requires:	alice-root-%{root_ver}-minuit2
 Requires:	alice-root-%{root_ver}-genvector
+Requires:       alice-root-%{root_ver}-montecarlo-vmc
 Requires:	alice-geant3-%{geant3_ver}
 
 # define alice dir sctucture

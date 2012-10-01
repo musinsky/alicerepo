@@ -62,7 +62,9 @@ function SetAliRootModule() {
   if [ -z "$IS_MOD_IN_BASHRC" ];then
     echo "" >> $ALIROOT_BASHRC_FILE
     echo "# ALICE stuff" >> $ALIROOT_BASHRC_FILE
-    echo "$ALIROOT_VERSIPN_FILE/bin/aliroot-version latest || module add \$(ls -1t \$HOME/.alice/ | head -n 1)" >> $ALIROOT_BASHRC_FILE
+    echo "if [ -f $ALIROOT_VERSIPN_FILE/bin/aliroot-version ];then" >> $ALIROOT_BASHRC_FILE
+    echo "  $ALIROOT_VERSIPN_FILE/bin/aliroot-version latest || module add \$(ls -1t \$HOME/.alice/ | head -n 1)" >> $ALIROOT_BASHRC_FILE
+    echo "fi" >> $ALIROOT_BASHRC_FILE
     echo "# end ALICE stuff" >> $ALIROOT_BASHRC_FILE
     echo "" >> $ALIROOT_BASHRC_FILE
   fi
