@@ -2,7 +2,7 @@
 %global debug_package %{nil}
 
 # version
-%define alice_package_version 1.14.4
+%define alice_package_version 1.14.5
 
 #deps versions
 %define openssl_ver 0.9.8x
@@ -36,6 +36,7 @@ URL:		http://root.cern.ch/
 Source0:	%{name}.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
+BuildRequires:  gcc-gfortran
 BuildRequires:	alice-root-%{root_ver}
 BuildRequires:  alice-root-%{root_ver}-core
 BuildRequires:  alice-root-%{root_ver}-montecarlo-vmc

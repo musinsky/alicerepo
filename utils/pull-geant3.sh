@@ -6,7 +6,7 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-G3_REV="4"
+G3_REV="5"
 G3_VER=${1//-/.}.$G3_REV
 
 SVN_PATH1="geant3_svn_$G3_VER"

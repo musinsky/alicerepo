@@ -1,6 +1,6 @@
 %define package_name new
 %define alice_name aliroot-an-%{package_name}
-%define alice_package_version 5.03.66
+%define alice_package_version 5.03.70
 
 Name:		%{alice_name}
 Version:	%{alice_package_version}
