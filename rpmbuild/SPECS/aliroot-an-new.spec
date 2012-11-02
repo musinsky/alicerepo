@@ -1,10 +1,11 @@
 %define package_name new
 %define alice_name aliroot-an-%{package_name}
-%define alice_package_version 5.03.70
+%define alice_package_version 5.03.75
+%define alice_package_fedora_rev 0
 
 Name:		%{alice_name}
 Version:	%{alice_package_version}
-Release:	1%{?dist}
+Release:	%{alice_package_fedora_rev}%{?dist}
 Summary:	Virtual env package for ALICE
 Group:		System Environment/Daemons
 License:	LGPLv2+

@@ -14,7 +14,7 @@
 %define alice_env_module_dir %{alice_dir}/env_modules
 
 # version and deps
-%define alice_package_version 5.34.02
+%define alice_package_version 5.34.03
 %define openssl_dir %{alice_dir}/openssl/%{openssl_ver}
 %define xrootd_dir %{alice_dir}/xrootd/%{xrootd_ver}
 %define alien_dir %{alice_dir}/alien-client/%{alien_ver}
