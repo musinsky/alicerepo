@@ -2,13 +2,13 @@
 %global debug_package %{nil}
 
 # version
-%define alice_package_version 1.14.6
+%define alice_package_version 1.14.8
 
 #deps versions
 %define openssl_ver 0.9.8x
 %define xrootd_ver 3.0.5
 %define alien_ver 1.0.14n
-%define root_ver 5.34.03
+%define root_ver 5.34.05
 
 
 %define package_name geant3

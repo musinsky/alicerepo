@@ -14,7 +14,7 @@
 %define alice_env_module_dir %{alice_dir}/env_modules
 
 # version and deps
-%define alice_package_version 5.34.03
+%define alice_package_version 5.34.05
 %define openssl_dir %{alice_dir}/openssl/%{openssl_ver}
 %define xrootd_dir %{alice_dir}/xrootd/%{xrootd_ver}
 %define alien_dir %{alice_dir}/alien-client/%{alien_ver}
@@ -401,6 +401,14 @@ Group:		Applications/Engineering
 
 %description graf-gviz
 This package contains the 2-dimensional graphviz library for ROOT.
+
+%package graf-mathtext
+Summary:	Graphviz 2D library for ROOT
+Group:		Applications/Engineering
+
+%description graf-mathtext
+This package contains the 2-dimensional graphviz library for ROOT.
+
 
 %package graf-postscript
 Summary:	Postscript/PDF renderer library for ROOT
@@ -1047,7 +1055,7 @@ package to use root with GNU Emacs.
 if pkg-config --max-version 2.1.2 ftgl ; then
 %patch0 -p1
 fi
-%patch1 -p1
+#%patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
@@ -1084,7 +1092,7 @@ sed '/zlib\/zlib.h/d' -i graf2d/asimage/src/libAfterImage/.depend
 #  * ftgl
 rm -rf graf3d/ftgl/src graf3d/ftgl/inc
 #  * freetype
-rm -rf graf2d/freetype/src
+#rm -rf graf2d/freetype/src
 #  * glew
 rm -rf graf3d/glew/src graf3d/glew/inc
 #  * pcre
@@ -1142,7 +1150,7 @@ export ROOTSYS="%{alice_prefix}"
 	    --enable-builtin-afterimage \
 %endif
 	    --disable-builtin-ftgl \
-	    --disable-builtin-freetype \
+	    --enable-builtin-freetype \
 	    --disable-builtin-glew \
 	    --disable-builtin-lzma \
 	    --disable-builtin-pcre \
@@ -1311,7 +1319,7 @@ install -p -m 644 build/package/debian/application-x-root.png \
     ${RPM_BUILD_ROOT}%{alice_prefix}/icons/hicolor/48x48/mimetypes
 
 
-rm -Rf ${RPM_BUILD_ROOT}%{alice_prefix}/fonts
+#rm -Rf ${RPM_BUILD_ROOT}%{alice_prefix}/fonts
 # Init scripts for services
 ##mkdir -p ${RPM_BUILD_ROOT}%{_initrddir}
 rm ${RPM_BUILD_ROOT}%{_datadir}/daemons/proofd.rc.d
@@ -1581,6 +1589,8 @@ fi
 %postun graf-gpad -p /sbin/ldconfig
 %post graf-gviz -p /sbin/ldconfig
 %postun graf-gviz -p /sbin/ldconfig
+%post graf-mathtext -p /sbin/ldconfig
+%postun graf-mathtext -p /sbin/ldconfig
 %post graf-postscript -p /sbin/ldconfig
 %postun graf-postscript -p /sbin/ldconfig
 %if %{?fedora}%{!?fedora:0} >= 9 || %{?rhel}%{!?rhel:0} >= 6
@@ -1760,6 +1770,7 @@ fi
 %{_libdir}/libRint.*
 %{_libdir}/libThread.*
 %{_libdir}/lib[^R]*Dict.*
+%{_libdir}/libfreetype.a
 %dir %{_datadir}
 %{_datadir}/class.rules
 %{_datadir}/gdb-backtrace.sh
@@ -1770,6 +1781,7 @@ fi
 %{_datadir}/system.rootrc
 %{_mandir}/man1/system.rootdaemonrc.1*
 %dir %{alice_prefix}/macros
+%{alice_prefix}/fonts
 %{alice_prefix}/macros/Dialogs.C
 %dir %{_datadir}/plugins
 %dir %{_datadir}/plugins/*
@@ -1834,9 +1846,11 @@ fi
 %{_bindir}/proofserv
 %{_bindir}/proofserv.exe
 %{_bindir}/xproofd
+%{_bindir}/xpdtest
 %{_mandir}/man1/proofd.1*
 %{_mandir}/man1/proofserv.1*
 %{_mandir}/man1/xproofd.1*
+%{_mandir}/man1/xpdtest.1*
 #%{_initrddir}/proofd
 
 %files rootd
@@ -1921,6 +1935,10 @@ fi
 %files graf-gviz -f includelist-graf2d-gviz
 %defattr(-,root,root,-)
 %{_libdir}/libGviz.*
+
+%files graf-mathtext -f includelist-graf2d-mathtext
+%defattr(-,root,root,-)
+%{_libdir}/libmathtext.*
 
 %files graf-postscript -f includelist-graf2d-postscript
 %defattr(-,root,root,-)
@@ -2256,6 +2274,7 @@ fi
 %{_libdir}/libProofPlayer.*
 %{_datadir}/plugins/TChain/P010_TProofChain.C
 %{_datadir}/plugins/TDataSetManager/P010_TDataSetManagerFile.C
+%{_datadir}/plugins/TDataSetManager/P020_TDataSetManagerAliEn.C
 %{_datadir}/plugins/TProof/P010_TProofCondor.C
 %{_datadir}/plugins/TProof/P020_TProofSuperMaster.C
 %{_datadir}/plugins/TProof/P040_TProof.C

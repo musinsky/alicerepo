@@ -4,14 +4,14 @@
 # version
 %define package_name aliroot-an
 
-%define alice_package_version 5.03.75
+%define alice_package_version 5.04.34
 %define	alice_fedora_rev 0
 #deps versions
 %define openssl_ver 0.9.8x
 %define xrootd_ver 3.0.5
 %define alien_ver 1.0.14n
-%define root_ver 5.34.03
-%define geant3_ver 1.14.6
+%define root_ver 5.34.05
+%define geant3_ver 1.14.8
 
 %define alice_name alice-%{package_name}
 
@@ -71,6 +71,7 @@ Requires:	alice-root-%{root_ver}-mathmore
 Requires:	alice-root-%{root_ver}-minuit2
 Requires:	alice-root-%{root_ver}-genvector
 Requires:       alice-root-%{root_ver}-montecarlo-vmc
+Requires:       alice-root-%{root_ver}-tree-viewer
 Requires:	alice-geant3-%{geant3_ver}
 
 # define alice dir sctucture
